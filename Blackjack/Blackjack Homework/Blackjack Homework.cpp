@@ -14,7 +14,15 @@ void updatePlayerPoints(const Card& card, const Deck& deck, Player& player);
 void toLower(char userEntry[]);
 //void updatePlayer(Player& player, int HostPoints);
 
+void game();
+
 int main()
+{
+	game();
+	system("pause");
+}
+
+void game()
 {
 	std::cout << "_ _ _ _ _ _ Welcome to Kenan's Blackjack 1.0 Game _ _ _ _ _ _" << std::endl << std::endl;
 	Player player;
@@ -23,7 +31,7 @@ int main()
 	int k;
 	std::cin >> k;
 	Deck deck(k, "Custom");
-	
+
 	do
 	{
 		char entry;
@@ -51,8 +59,8 @@ int main()
 		}
 		std::cout << "Your Deck has " << notDrawedCardsNumber << " remainung non-drawed cards." << std::endl;
 		if (notDrawedCardsNumber == 0)
-		{	
-			deck.shuffleDeck();	
+		{
+			deck.shuffleDeck();
 			std::cout << "Your deck has been re-SHUFFLED;  Remaining cards: " << deck.getK() << std::endl;
 		}
 
@@ -97,7 +105,7 @@ int main()
 				std::cout << std::endl << "Hosts cards:" << std::endl;
 				int hostpoints = generateHostPoints(deck);
 				std::cout << "Host's points: " << hostpoints << std::endl;
-				if (hostpoints > 21) 
+				if (hostpoints > 21)
 				{
 					playerWins(player);
 					break;

@@ -6,123 +6,191 @@
 #include <iostream>
 #include <stdlib.h> // for system("CLS"); - clearing console screen
 
+void gameSETUP(Player& player, int& k);
+void gameProcess(Player& player, Deck& deck);
+void gameStart(Player& player, Deck& deck);
+void continueORexit(Player& player, Deck& deck);
+void drawCardCheckPoints(Player& player, Deck& deck);
+void HitStandProbability(Player& player, Deck& deck);
+void hit(Player& player, Deck& deck);
+void stand(Player& player, Deck& deck);
+void probability(Player& player, Deck& deck);
+
 double calculateProbability(const Deck& deck, const Player& player);
 void hostWins(Player& player);
 void playerWins(Player& player);
 int generateHostPoints(Deck& deck, int HostPoints = 0);
 void updatePlayerPoints(const Card& card, const Deck& deck, Player& player);
 void toLower(char userEntry[]);
-//void updatePlayer(Player& player, int HostPoints);
 
-void game();
 
 int main()
 {
-	game();
-	system("pause");
+	Player player;
+	int k;
+	gameSETUP(player, k);
+	Deck deck(k, "Custom");
+	gameProcess(player, deck);
 }
 
-void game()
+void gameSETUP(Player& player, int& k)
 {
 	std::cout << "_ _ _ _ _ _ Welcome to Kenan's Blackjack 1.0 Game _ _ _ _ _ _" << std::endl << std::endl;
-	Player player;
 	std::cin >> player;
-	std::cout << "Enter the number of Cards you want in your Deck: ";
-	int k;
-	std::cin >> k;
-	Deck deck(k, "Custom");
 
+	//creating the deck
+	std::cout << "Choose your deck: (1)Default deck, (2)custom deck: ";
+	char input;
 	do
 	{
-		char entry;
-		std::cout << "Play/Continue(0);  Exit(1):  ";
-		do
-		{
-			std::cin >> entry;
-			if (entry == '1' || entry == '0') break;
-			std::cout << "Wrong input, try again: ";
-		} while (true);
-		if (entry == '1')
-		{
-			std::cout << "All files have been saved; Exiting game . . .";
-			break;
-		}
-
-		system("CLS"); // clear console 
-		std::cout << "_ _ _ _ _ _ Welcome to Kenan's Blackjack 1.0 Game _ _ _ _ _ _" << std::endl << std::endl;
-		std::cout << player << std::endl;
-		std::cout << " START ! " << std::endl;
-		int notDrawedCardsNumber = 0;
-		for (int i = 0; i < deck.getK(); i++)
-		{
-			if (deck.getDeck()[i].getDrawed() == 0) notDrawedCardsNumber++;
-		}
-		std::cout << "Your Deck has " << notDrawedCardsNumber << " remainung non-drawed cards." << std::endl;
-		if (notDrawedCardsNumber == 0)
-		{
-			deck.shuffleDeck();
-			std::cout << "Your deck has been re-SHUFFLED;  Remaining cards: " << deck.getK() << std::endl;
-		}
-
-		player.setCurrentPoints(0);
-		char userEntry[20] = " ";
-		do
-		{
-			if (strcmp(userEntry, "probability") != 0)
-			{
-				Card currentCard;
-				currentCard = deck.draw();
-				updatePlayerPoints(currentCard, deck, player);
-				std::cout << currentCard << "  Your Total Current Points: " << player.getCurrentPoints() << std::endl << std::endl;
-
-				if (player.getCurrentPoints() > 21)
-				{
-					hostWins(player);
-					break;
-				}
-				if (player.getCurrentPoints() == 21)
-				{
-					std::cout << "BLACKJACK! ";
-					playerWins(player);
-					break;
-				}
-			}
-			std::cout << "Hit/Stand/Probability: ";
-			do
-			{
-				std::cin >> userEntry;
-				toLower(userEntry);
-				if (strcmp(userEntry, "hit") == 0 || strcmp(userEntry, "stand") == 0 || strcmp(userEntry, "probability") == 0) break;
-				std::cout << "Wrong input, try again: ";
-			} while (true);
-
-			if (strcmp(userEntry, "hit") == 0)
-			{
-				//
-			}
-			else if (strcmp(userEntry, "stand") == 0)
-			{
-				std::cout << std::endl << "Hosts cards:" << std::endl;
-				int hostpoints = generateHostPoints(deck);
-				std::cout << "Host's points: " << hostpoints << std::endl;
-				if (hostpoints > 21)
-				{
-					playerWins(player);
-					break;
-				}
-				if (hostpoints >= 17 && hostpoints <= 21)
-				{
-					if (hostpoints > player.getCurrentPoints()) hostWins(player);
-					else playerWins(player);
-					break;
-				}
-			}
-			else if (strcmp(userEntry, "probability") == 0)
-			{
-				std::cout << "Probability for Blackjack(21points):  " << calculateProbability(deck, player) << std::endl;
-			}
-		} while (true);
+		std::cin >> input;
+		if (input == '1' || input == '2') break;
+		std::cout << "Wrong input, try again: ";
 	} while (true);
+	if (input == '1') k = 52;
+	else if (input == '2')
+	{
+		std::cout << "Enter the number of Cards you want in your Deck: ";
+		std::cin >> k;
+	}
+}
+
+void gameProcess(Player& player, Deck& deck)
+{
+	gameStart(player, deck);
+	drawCardCheckPoints(player, deck);
+	HitStandProbability(player, deck);
+}
+
+void gameStart(Player& player, Deck& deck)
+{
+	player.setCurrentPoints(0);
+	system("CLS"); // clear console 
+	std::cout << "_ _ _ _ _ _ Welcome to Kenan's Blackjack 1.0 Game _ _ _ _ _ _" << std::endl << std::endl;
+	std::cout << player << std::endl;
+	std::cout << " START ! " << std::endl;
+	int notDrawedCardsNumber = 0;
+	for (int i = 0; i < deck.getK(); i++)
+	{
+		if (deck.getDeck()[i].getDrawed() == 0) notDrawedCardsNumber++;
+	}
+	std::cout << "Your Deck has " << notDrawedCardsNumber << " remainung non-drawed cards." << std::endl;
+	if (notDrawedCardsNumber == 0)
+	{
+		deck.shuffleDeck();
+		std::cout << "Your deck has been re-SHUFFLED;  Remaining cards: " << deck.getK() << std::endl;
+	}
+}
+void continueORexit(Player& player, Deck& deck)
+{
+	char entry;
+	std::cout << "Continue(0);  Exit(1):  ";
+	do
+	{
+		std::cin >> entry;
+		if (entry == '1' || entry == '0') break;
+		std::cout << "Wrong input, try again: ";
+	} while (true);
+
+	if (entry == '0')
+	{
+		gameProcess(player, deck);
+	}
+	if (entry == '1')
+	{
+		std::cout << "Exiting game . . .";
+		exit(0);
+	}
+}
+void drawCardCheckPoints(Player& player, Deck& deck)
+{
+	Card currentCard;
+	currentCard = deck.draw();
+	updatePlayerPoints(currentCard, deck, player);
+	std::cout << currentCard << "  Your Total Current Points: " << player.getCurrentPoints() << std::endl << std::endl;
+
+	//check points - winner?
+	if (player.getCurrentPoints() > 21)
+	{
+		hostWins(player);
+		continueORexit(player, deck);
+	}
+	if (player.getCurrentPoints() == 21)
+	{
+		std::cout << "BLACKJACK! ";
+		playerWins(player);
+		continueORexit(player, deck);
+	}
+}
+void HitStandProbability(Player& player, Deck& deck)
+{
+	char userEntry[20];
+	std::cout << "Hit/Stand/Probability: ";
+	do
+	{
+		std::cin >> userEntry;
+		toLower(userEntry);
+		if (strcmp(userEntry, "hit") == 0 || strcmp(userEntry, "stand") == 0 || strcmp(userEntry, "probability") == 0) break;
+		std::cout << "Wrong input, try again: ";
+	} while (true);
+
+	if (strcmp(userEntry, "hit") == 0)
+	{
+		hit(player, deck);
+	}
+	else if (strcmp(userEntry, "stand") == 0)
+	{
+		stand(player, deck);
+
+		std::cout << std::endl << "Hosts cards:" << std::endl;
+		int hostpoints = generateHostPoints(deck);
+		std::cout << "Host's points: " << hostpoints << std::endl;
+		if (hostpoints > 21)
+		{
+			playerWins(player);
+
+		}
+		if (hostpoints >= 17 && hostpoints <= 21)
+		{
+			if (hostpoints > player.getCurrentPoints()) hostWins(player);
+			else playerWins(player);
+
+		}
+	}
+	else if (strcmp(userEntry, "probability") == 0)
+	{
+		probability(player, deck);
+
+		std::cout << "Probability for Blackjack(21points):  " << calculateProbability(deck, player) << std::endl;
+	}
+}
+void hit(Player& player, Deck& deck)
+{
+	drawCardCheckPoints(player, deck);
+	HitStandProbability(player, deck);
+}
+void stand(Player& player, Deck& deck)
+{
+	std::cout << std::endl << "Hosts cards:" << std::endl;
+	int hostpoints = generateHostPoints(deck);
+	std::cout << "Host's points: " << hostpoints << std::endl;
+	if (hostpoints > 21)
+	{
+		playerWins(player);
+		continueORexit(player, deck);
+	}
+	if (hostpoints >= 17 && hostpoints <= 21)
+	{
+		if (hostpoints > player.getCurrentPoints()) hostWins(player);
+		else playerWins(player);
+
+		continueORexit(player, deck);
+	}
+}
+void probability(Player& player, Deck& deck)
+{
+	std::cout << "Probability for Blackjack(21 points) with the next drawn card: " << calculateProbability(deck, player) << std::endl;
+	HitStandProbability(player, deck);
 }
 
 double calculateProbability(const Deck& deck, const Player& player)
@@ -192,5 +260,3 @@ void toLower(char userEntry[])
 		if (userEntry[i] >= 'A' && userEntry[i] <= 'Z') userEntry[i] = userEntry[i] + 32;
 	}
 }
-
-

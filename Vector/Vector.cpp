@@ -1,9 +1,10 @@
 #include "Vector.h"
 
-void Vector::resize()
+template <class T>
+void Vector<T>::resize()
 {
 	this->capacity = capacity * 2;
-	int* newBuffer = new int[capacity];
+	T * newBuffer = new T[capacity];
 	for (int i = 0; i < size; i++)
 	{
 		newBuffer[i] = this->data[i];
@@ -12,47 +13,54 @@ void Vector::resize()
 	this->data = newBuffer;
 }
 
-void Vector::copy(const Vector& other)
+template <class T>
+void Vector<T>::copy(const Vector<T>& other)
 {
 	this->size = other.size;
 	this->capacity = other.capacity;
-	this->data = new int[capacity];
+	this->data = new T[capacity];
 	for (int i = 0; i < this->size; i++)
 	{
 		this->data[i] = other.data[i];
 	}
 }
 
-void Vector::erase()
+template <class T>
+void Vector<T>::erase()
 {
 	delete[] this->data;
 }
 
-Vector::Vector()
+template <class T>
+Vector<T>::Vector()
 {
 	this->size = 0;
 	this->capacity = 8;
-	this->data = new int[capacity];
+	this->data = new T[capacity];
 }
 
-Vector::Vector(const Vector& other)
+template <class T>
+Vector<T>::Vector(const Vector<T>& other)
 {
 	copy(other);
 }
 
-Vector::~Vector()
+template <class T>
+Vector<T>::~Vector()
 {
 	erase();
 }
 
-Vector::Vector(size_t initialSize)
+template <class T>
+Vector<T>::Vector(size_t initialSize)
 {
 	this->size = initialSize;
 	this->capacity = initialSize;
-	this->data = new int[capacity];
+	this->data = new T[capacity];
 }
 
-void Vector::print()
+template <class T>
+void Vector<T>::print()
 {
 	for (int i = 0; i < this->size; i++)
 	{
@@ -60,11 +68,12 @@ void Vector::print()
 	}
 }
 
-Vector& Vector::push_front(int New)
+template <class T>
+Vector<T>& Vector<T>::push_front(const T & New)
 {
 	if (this->size == this->capacity - 1) resize();
 
-	int* newBuffer = new int[this->size+1];
+	T * newBuffer = new T[this->size+1];
 	for (int i = 0; i < this->size; i++)
 	{
 		newBuffer[i+1] = this->data[i];
@@ -77,11 +86,12 @@ Vector& Vector::push_front(int New)
 	return *this;
 }
 
-Vector& Vector::push_back(int New)
+template <class T>
+Vector<T>& Vector<T>::push_back(const T& New)
 {
 	if (this->size == this->capacity - 1) resize();
 
-	int* newBuffer = new int[this->size + 1];
+	T * newBuffer = new T[this->size + 1];
 	for (int i = 0; i < this->size; i++)
 	{
 		newBuffer[i] = this->data[i];
@@ -94,12 +104,14 @@ Vector& Vector::push_back(int New)
 	return *this;
 }
 
-size_t Vector::getSize() const
+template <class T>
+size_t Vector<T>::getSize() const
 {
 	return this->size;
 }
 
-void Vector::removeAtIndex(int index)
+template <class T>
+void Vector<T>::removeAtIndex(int index)
 {
 
 	for (int i = index; i < this->size - 1; i++)
@@ -109,7 +121,8 @@ void Vector::removeAtIndex(int index)
 	this->size--;
 }
 
-void Vector::removeElement(int element)
+template <class T>
+void Vector<T>::removeElement(const T& element)
 {
 	int index;
 	for (int i = 0; i < this->size; i++)
@@ -119,11 +132,12 @@ void Vector::removeElement(int element)
 	removeAtIndex(index);
 }
 
-void Vector::insertAtPos(int index, int element)
+template <class T>
+void Vector<T>::insertAtPos(int index, const T& element)
 {
 	if (this->size == this->capacity) resize();
 
-	int* newBuffer = new int[size + 1];
+	T * newBuffer = new T[size + 1];
 
 	for (int i = 0; i < index-1; i++)
 	{
@@ -139,7 +153,8 @@ void Vector::insertAtPos(int index, int element)
 	this->data = newBuffer;
 }
 
-bool Vector::contains(int element)const
+template <class T>
+bool Vector<T>::contains(const T & element)const
 {
 	for (int i = 0; i < this->size; i++)
 	{
@@ -149,7 +164,8 @@ bool Vector::contains(int element)const
 	return false;
 }
 
-Vector& Vector::operator=(const Vector& other)
+template <class T>
+Vector<T>& Vector<T>::operator=(const Vector<T>& other)
 {
 	if (this != &other)
 	{
@@ -159,9 +175,10 @@ Vector& Vector::operator=(const Vector& other)
 	return *this;
 }
 
-Vector Vector::operator+(const Vector& other) const
+template <class T>
+Vector<T> Vector<T>::operator+(const Vector<T>& other) const
 {
-	Vector result(*this);
+	Vector<T> result(*this);
 	for (int i = 0; i < other.size; i++)
 	{
 		result.push_back(other.data[i]);
@@ -169,33 +186,38 @@ Vector Vector::operator+(const Vector& other) const
 	return result;
 }
 
-Vector Vector::operator+(const int element) const
+template <class T>
+Vector<T> Vector<T>::operator+(const T& element) const
 {
-	Vector result(*this);
+	Vector<T> result(*this);
 	result.push_back(element);
 	return result;
 }
 
-Vector& Vector::operator+=(int element)
+template <class T>
+Vector<T>& Vector<T>::operator+=(const T & element)
 {
 	// vector = vector + element
 	this->push_back(element);
 	return *this;
 }
 
-Vector& Vector::operator+=(const Vector& other)
+template <class T>
+Vector<T>& Vector<T>::operator+=(const Vector<T>& other)
 {
 	// vector = vector + otherVector;
 	*this = *this + other;
 	return *this;
 }
 
-int& Vector::operator[](int index) const
+template <class T>
+T& Vector<T>::operator[](int index) const
 {
 	return this->data[index];
 }
 
-bool Vector::operator==(const Vector& other)const
+template <class T>
+bool Vector<T>::operator==(const Vector<T>& other)const
 {
 	if (this->size == other.size)
 	{
@@ -212,12 +234,14 @@ bool Vector::operator==(const Vector& other)const
 	return false;
 }
 
-bool Vector::operator!=(const Vector& other)const
+template <class T>
+bool Vector<T>::operator!=(const Vector<T>& other)const
 {
 	return !(*this == other);
 }
 
-std::ostream& operator<<(std::ostream& out, const Vector& vector)
+template <class T>
+std::ostream& operator<<(std::ostream& out, const Vector<T>& vector)
 {
 	out << "[ ";
 	for (int i = 0; i < vector.getSize(); i++)

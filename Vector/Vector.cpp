@@ -14,7 +14,6 @@ void Vector::resize()
 
 void Vector::copy(const Vector& other)
 {
-	erase();
 	this->size = other.size;
 	this->capacity = other.capacity;
 	this->data = new int[capacity];
@@ -26,8 +25,6 @@ void Vector::copy(const Vector& other)
 
 void Vector::erase()
 {
-	this->size = 0;
-	this->capacity = 8;
 	delete[] this->data;
 }
 
@@ -172,7 +169,7 @@ Vector Vector::operator+(const Vector& other) const
 	return result;
 }
 
-Vector Vector::operator+(int element) const
+Vector Vector::operator+(const int element) const
 {
 	Vector result(*this);
 	result.push_back(element);
@@ -193,7 +190,7 @@ Vector& Vector::operator+=(const Vector& other)
 	return *this;
 }
 
-const Vector& Vector::operator[](int index) const
+int& Vector::operator[](int index) const
 {
 	return this->data[index];
 }
@@ -227,6 +224,7 @@ std::ostream& operator<<(std::ostream& out, const Vector& vector)
 	{
 		out << vector[i] << " ";
 	}
-	out << " ] ";
+	out << "] ";
+
 	return out;
 }

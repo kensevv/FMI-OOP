@@ -30,13 +30,15 @@ public:
 	Vector& operator=(const Vector& other);
 
 	Vector operator+(const Vector& other)const;
-	Vector operator+(int element)const;
+	Vector operator+(const int element)const;
 	Vector& operator+=(int element);
 	Vector& operator+=(const Vector& other);
-	const Vector& operator[](int index)const;
+
+	int& operator[](int index)const;
 
 	bool operator==(const Vector & other)const;
 	bool operator!=(const Vector& other)const;
+
 	/*
 	bool operator<(const Vector& other)const;
 	bool operator>(const Vector& other)const;

@@ -48,6 +48,7 @@ public:
 	bool operator<=(const Vector& other)const;
 	*/
 	
-	friend std::ostream& operator<<(std::ostream& out, const Vector<T>& vector);
-	
 };
+
+template <class T>
+std::ostream& operator << (std::ostream& stream, const Vector<T>& v);

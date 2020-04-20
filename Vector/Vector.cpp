@@ -241,14 +241,15 @@ bool Vector<T>::operator!=(const Vector<T>& other)const
 }
 
 template <class T>
-std::ostream& operator<<(std::ostream& out, const Vector<T>& vector)
+std::ostream& operator << (std::ostream& stream, const Vector<T>& v)
 {
-	out << "[ ";
-	for (int i = 0; i < vector.getSize(); i++)
-	{
-		out << vector[i] << " ";
-	}
-	out << "] ";
 
-	return out;
+	stream << "[ ";
+	for (size_t i = 0; i < v.getSize(); ++i)
+	{
+		std::cout << v[i] << " ";
+	}
+	stream << "]";
+
+	return stream;
 }

@@ -146,7 +146,26 @@ Card * Deck::createDeck()
 		{
 			newDeck[addedCards].setColour(i);
 			newDeck[addedCards].setDrawed(0);
-			//TODO serialKEY
+
+			/*creating each cards unique serial key:
+			char helperkey[15];
+			helperkey[0] = ':';
+			helperkey[1] = 0;
+			int cardkey = (i + 1) * 100 + j + 1;
+
+			while (cardkey)
+			{
+				char symbol[2];
+				symbol[0] = '0' + cardkey % 10;
+				symbol[1] = 0;
+				strcat_s(helperkey, symbol);
+				cardkey = cardkey / 10;
+			}
+			char key[25];
+			strcpy_s(key, 10, getS());
+			strcat_s(key, helperkey);
+			newDeck[addedCards].setSerialKey(key);
+			*/
 
 			switch (j)
 			{

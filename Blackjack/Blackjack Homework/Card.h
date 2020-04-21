@@ -7,7 +7,7 @@ class Card
 private:
 	CardColour colour; // Spades, Hearts, Diamonds, and Clubs
 	char value[3]; // 2,3,4,5,6,7,8,9,10,J,Q,K,A
-	char serialKey[15];
+	char serialKey[25];
 	bool drawed;
 	int points;
 public:
@@ -16,7 +16,7 @@ public:
 	void setColour(CardColour newColour);
 	void setColour(int newColour);
 	void setValue(const char * newValue);
-	void setSerialKey(char newSerialKey[15]);
+	void setSerialKey(const char * newSerialKey);
 	void setDrawed(bool newDrawed);
 	void setPoints(int newPoints);
 	const CardColour getColour()const;

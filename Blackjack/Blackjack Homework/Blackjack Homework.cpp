@@ -6,7 +6,7 @@
 #include <iostream>
 #include <stdlib.h> // for system("CLS"); - clearing console screen
 
-void gameSETUP(Player& player, int& k);
+void gameSETUP(Player& player, int& k, char s[]);
 void gameProcess(Player& player, Deck& deck);
 void gameStart(Player& player, Deck& deck);
 void continueORexit(Player& player, Deck& deck);
@@ -28,12 +28,14 @@ int main()
 {
 	Player player;
 	int k;
-	gameSETUP(player, k);
-	Deck deck(k, "Custom");
+	char s[10];
+	gameSETUP(player, k, s);
+	Deck deck(k, s);
+
 	gameProcess(player, deck);
 }
 
-void gameSETUP(Player& player, int& k)
+void gameSETUP(Player& player, int& k, char s[])
 {
 	std::cout << "_ _ _ _ _ _ Welcome to Kenan's Blackjack 1.0 Game _ _ _ _ _ _" << std::endl << std::endl;
 	std::cin >> player;
@@ -47,9 +49,15 @@ void gameSETUP(Player& player, int& k)
 		if (input == '1' || input == '2') break;
 		std::cout << "Wrong input, try again: ";
 	} while (true);
-	if (input == '1') k = 52;
+	if (input == '1')
+	{
+		strcpy_s(s, 10, "Default");
+		k = 52;
+	}
 	else if (input == '2')
 	{
+		std::cout << "Enter an unique Serial for your Deck: ";
+		std::cin >> s;
 		std::cout << "Enter the number of Cards you want in your Deck: ";
 		std::cin >> k;
 	}
@@ -202,7 +210,13 @@ double calculateProbability(const Deck& deck, const Player& player)
 	{
 		if (deck.getDeck()[i].getDrawed() == 0)
 		{
-			if (21 - player.getCurrentPoints() == deck.getDeck()[i].getPoints()) fittingCards++;
+			int cardPoints = deck.getDeck()[i].getPoints();
+			if (strcmp(deck.getDeck()[i].getValue(), "A") == 0)
+			{
+				if (21 - player.getCurrentPoints() == 1) cardPoints = 1;
+			}
+
+			if (21 - player.getCurrentPoints() == cardPoints) fittingCards++;
 			totalRemainingCards++;
 		}
 	}
@@ -227,7 +241,6 @@ void playerWins(Player& player)
 int generateHostPoints(Deck& deck, int HostPoints)
 {
 	if (HostPoints >= 17) return HostPoints;
-	//if(current.getValue(), "A")
 	Card current = deck.draw();
 	std::cout << current << ", ";
 	return generateHostPoints(deck, HostPoints + current.getPoints());

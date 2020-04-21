@@ -12,6 +12,7 @@ Card& Card::operator=(const Card& other)
 	this->colour = other.colour;
 	strcpy_s(this->value, strlen(other.value)+ 1, other.value);
 	strcpy_s(this->serialKey, strlen(other.serialKey) + 1 ,other.serialKey);
+
 	this->points = other.points;
 	this->drawed = other.drawed;
 
@@ -94,7 +95,7 @@ void Card::setValue(const char* newValue)
 
 
 
-void Card::setSerialKey(char newSerialKey[15])
+void Card::setSerialKey(const char * newSerialKey)
 {
 	strcpy_s(this->serialKey, strlen(newSerialKey)+1 , newSerialKey);
 }

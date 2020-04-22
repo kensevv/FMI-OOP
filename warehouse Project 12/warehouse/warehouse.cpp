@@ -18,7 +18,8 @@ void swap(Product & other, Product & another)
 	other = another;
 	another = temp;
 }
-void sortByReceiveDate(Product** products, int size)
+
+/*void sortByReceiveDate(Product** products, int size)
 {
 	for (size_t i = 0; i < size; i++)
 	{
@@ -30,57 +31,10 @@ void sortByReceiveDate(Product** products, int size)
 			}
 		}
 	}
-}
+}*/
+
 
 int main()
 {
-	
-	Product testA, testB; // default constructor test
-	
-	//operators test << >> =
-	cout << "cin >> testA;" << endl;
-	cin >> testA; 
-	cout << " cout << testA; " << endl << testA << endl;
-	testB = testA;
-	cout << " cout << testB; " << endl << testB << endl;
-	cout << endl;
-	Date testExpiryDate;
-	cout << "testExpiryDate :";
-	cin >> testExpiryDate;
-	Date testReceiveDate(7, 4, 2020);
-	// date: operator <  test:
-	cout << "textexpirydate: " << testExpiryDate << endl;
-	cout << "testreceivedate: " << testReceiveDate << endl;
-	cout << "(testExpiryDate < testReceiveDate): " << (testExpiryDate < testReceiveDate) << endl;
-	cout << endl;
-	Product cola("Cola", drinks, testExpiryDate, testReceiveDate, "Derby", 1, 100, "Non-Alchohol Drink - Coca-Cola" );
-	cout << " cout << cola; " << endl << cola << endl;
-	Date today(7, 4, 2020);
-	cout << "Date today : " << today << endl;
-	cout << "is Cola expred? : " << isExpired(today, cola) << endl;
-	
-	cout << endl;
-	
-	cout << "array of products:";
-	const int SIZE = 2;
-	//Product products[SIZE];
-	Product* products = new Product[SIZE];
-	for (int i = 0; i < SIZE; i++)
-	{
-		cin >> products[i];
-	}
-	cout << endl << endl;
-	for (int i = 0; i < SIZE; i++)
-	{
-		cout << products[i];
-	}
-	cout << endl;
-	
-	cout<< "sortbyDate function test";
-	sortByReceiveDate(&products, SIZE);
-	for (int i = 0; i < SIZE; i++)
-	{
-		cout << products[i];
-	}
-	delete[] products;
+
 }

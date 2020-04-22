@@ -21,8 +21,8 @@ Product::Product()
 {
 	setName("Default Name");
 	setType(defaultType);
-	setExpiryDate(1, 1, 2021);
-	setReceiveDate(5, 4, 2020);
+	setExpiryDate(2021, 1, 1);
+	setReceiveDate(2020, 4, 5);
 	setManufacturer("Default Manufacturer");
 	setUnit(0);
 	setAvailableQunatity(0);
@@ -42,13 +42,12 @@ Product& Product::operator=(const Product& other)
 }
 
 Product::Product(const char* newName,productType newType ,Date newExpiryDate, Date newReceiveDate, const char* newManufacturer, bool newUnit, int newAvailableQuantity, const char* newNote)
-	: name(nullptr), manufacturer(nullptr), note(nullptr)
 {
 	
 	this->name = newName;
 	this->setType(newType);
-	setExpiryDate(newExpiryDate.day, newExpiryDate.month, newExpiryDate.year);
-	setReceiveDate(newReceiveDate.day, newReceiveDate.month, newReceiveDate.year);
+	this->expiryDate = newExpiryDate;
+	this->receiveDate = newReceiveDate;
 	this->manufacturer = newManufacturer;
 	setUnit(newUnit);
 	setAvailableQunatity(newAvailableQuantity);
@@ -223,14 +222,12 @@ std::ostream& operator<<(std::ostream& out, const Product& current)
 
 	out << "AvailableQuantity: " << current.availableQuantity << endl
 		<< "Note: " << current.note << endl;
+
 	return out;
 }
 
 std::istream& operator>>(std::istream& in, Product& current) {
 	cout << "Enter Product Name: ";
-	
-	//cin.get();
-	//cin.getline(current.name, 128);
 	String newName;
 	cin >> newName;
 	current.setName(newName);
@@ -295,23 +292,25 @@ std::istream& operator>>(std::istream& in, Product& current) {
 	}
 	
 	cout << "Enter expiryDate below" << endl;
-	cout << "Day: ";
-	in >> current.expiryDate.day;
-	cout << "Month: ";
-	in >> current.expiryDate.month;
 	cout << "Year: ";
 	in >> current.expiryDate.year;
+	cout << "Month: ";
+	in >> current.expiryDate.month;
+	cout << "Day: ";
+	in >> current.expiryDate.day;
+	
 
 	cout << "Enter ReceiveDate below"<<endl;
-	cout << "Day: ";
-	in >> current.receiveDate.day;
-	cout << "Month: ";
-	in >> current.receiveDate.month;
 	cout << "Year: ";
 	in >> current.receiveDate.year;
+	cout << "Month: ";
+	in >> current.receiveDate.month;
+	cout << "Day: ";
+	in >> current.receiveDate.day;
 
 	cout << "Enter manufacturer: ";
 	String newManf;
+	cin.get();
 	cin >> newManf;
 	current.setManufacturer(newManf);
 
@@ -322,9 +321,8 @@ std::istream& operator>>(std::istream& in, Product& current) {
 	in >> current.availableQuantity;
 
 	cout << "Enter Note: ";
-	//in.get();
-	//in.getline(current.note, 300);
 	String newNote;
+	cin.get();
 	cin >> newNote;
 	current.setNote(newNote);
 

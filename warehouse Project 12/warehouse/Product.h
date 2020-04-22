@@ -16,14 +16,13 @@ private:
 	int availableQuantity;
 	String note;
 
-	//void erase();
 	void copy(const Product & other);
 
 public:
 	Product();
 	Product(const Product &other);
 	Product& operator=(const Product &other);
-	Product(const char* newName, productType newType,Date newExpiryDate, Date newReceiveDate, const char* newManufacturer, bool newUnit, int newAvailableQuantity, const char* newNote);
+	Product(const char* newName, productType newType, Date newExpiryDate, Date newReceiveDate, const char* newManufacturer, bool newUnit, int newAvailableQuantity, const char* newNote);
 
 	
 	// cout, cin

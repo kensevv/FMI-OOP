@@ -1,9 +1,7 @@
 #include "Product.h"
 #include <cstring>
 #include <iostream>
-using std::cout;
-using std::cin;
-using std::endl;
+
 
 void Product::copy(const Product & other)
 {
@@ -15,6 +13,10 @@ void Product::copy(const Product & other)
 	this->unit = other.unit;
 	this->availableQuantity = other.availableQuantity;
 	this->note = other.note;
+
+	this->storageLoc.section = other.storageLoc.section;
+	this->storageLoc.shelf = other.storageLoc.shelf;
+	this->storageLoc.cell = other.storageLoc.cell;
 }
 
 Product::Product()
@@ -27,6 +29,10 @@ Product::Product()
 	setUnit(0);
 	setAvailableQunatity(0);
 	setNote("Default Note");
+
+	setSection(0);
+	setShelf(0);
+	setCell(0);
 }
 
 Product::Product(const Product& other)
@@ -43,7 +49,6 @@ Product& Product::operator=(const Product& other)
 
 Product::Product(const char* newName,productType newType ,Date newExpiryDate, Date newReceiveDate, const char* newManufacturer, bool newUnit, int newAvailableQuantity, const char* newNote)
 {
-	
 	this->name = newName;
 	this->setType(newType);
 	this->expiryDate = newExpiryDate;
@@ -52,6 +57,10 @@ Product::Product(const char* newName,productType newType ,Date newExpiryDate, Da
 	setUnit(newUnit);
 	setAvailableQunatity(newAvailableQuantity);
 	this->note = newNote;
+
+	setSection(0);
+	setShelf(0);
+	setCell(0);
 }
 
 void Product::setName(const char* newName)
@@ -207,32 +216,110 @@ const String& Product::getNote() const
 	return this->note;
 }
 
+void Product::setSection(int newSection)
+{
+	this->storageLoc.section = newSection;
+}
+
+int Product::getSection() const
+{
+	return this->storageLoc.section;
+}
+
+void Product::setShelf(int newShelf)
+{
+	this->storageLoc.shelf = newShelf;
+}
+
+int Product::getShelf() const
+{
+	return this->storageLoc.shelf;
+}
+
+void Product::setCell(int newCell)
+{
+	this->storageLoc.cell = newCell;
+}
+
+int Product::getCell() const
+{
+	return this->storageLoc.cell;
+}
 
 
 std::ostream& operator<<(std::ostream& out, const Product& current)
 {
-	out << "Product name: " << current.name << endl
-		<< "Product Type: " << current.Type << endl
-		<< "expiryDate: " << current.expiryDate << endl
-		<< "receiveDate: " << current.receiveDate << endl
-		<< "Manufacturer: " << current.manufacturer << endl
-		<< "Unit: ";
-	if (current.unit == 0) out << "KGs" << endl;
-	else if (current.unit == 1) out << "Liters" << endl;
+		switch (current.Type)
+		{
+		case 0:
+		{
+			out << "(Default) ";
+			break;
+		}
+		case 1:
+		{
+			out << "(Food) ";
+			break;
+		}
 
-	out << "AvailableQuantity: " << current.availableQuantity << endl
-		<< "Note: " << current.note << endl;
+		case 2:
+		{
+			out << "(Drinks) ";
+			break;
+		}
+
+		case 3:
+		{
+			out << "(Alchohol) ";
+			break;
+		}
+		case 4:
+		{
+			out << "(Parfumery) ";
+			break;
+		}
+
+		case 5:
+		{
+
+			out << "(Household Goods) ";
+			break;
+		}
+		case 6:
+		{
+
+			out << "(Laundry Goods) ";
+			break;
+		}
+		case 7:
+		{
+
+			out << "(Other) ";
+			break;
+		}
+		default:
+		{
+			break;
+		};
+		}
+		if (current.unit == 0) out << "(KGs)";
+		else if (current.unit == 1) out << "(Liters)";
+	out << ": " << current.name << " - " << current.manufacturer << std::endl
+	    << "Quantity: " << current.availableQuantity << std::endl
+		<<"Location {" <<"Section: "<< current.storageLoc.section <<" Shelf: " << current.storageLoc.shelf << " Cell: " << current.storageLoc.cell<< "}" <<std::endl
+		<< "expiryDate: " << current.expiryDate << ", receiveDate: " << current.receiveDate << std::endl
+		<< "Note: " << current.note << std::endl;
 
 	return out;
 }
 
 std::istream& operator>>(std::istream& in, Product& current) {
-	cout << "Enter Product Name: ";
+	std::cout << "Enter Product Name: ";
 	String newName;
-	cin >> newName;
+	std::cin >> newName;
 	current.setName(newName);
 
-	cout << "Enter Product Type (0-defaultType,1-food,2-drinks,3-alchohol,4-parfumery,5-householdGoods,6-laundryGoods,7-other)";
+	std::cout << "Enter Product Type (0-defaultType,1-food,2-drinks,3-alchohol,4-parfumery,5-householdGoods,6-laundryGoods,7-other)";
 	int intType;
 	in >> intType;
 	switch (intType)
@@ -291,39 +378,39 @@ std::istream& operator>>(std::istream& in, Product& current) {
 	};
 	}
 	
-	cout << "Enter expiryDate below" << endl;
-	cout << "Year: ";
+	std::cout << "Enter expiryDate below" << std::endl;
+	std::cout << "Year: ";
 	in >> current.expiryDate.year;
-	cout << "Month: ";
+	std::cout << "Month: ";
 	in >> current.expiryDate.month;
-	cout << "Day: ";
+	std::cout << "Day: ";
 	in >> current.expiryDate.day;
 	
 
-	cout << "Enter ReceiveDate below"<<endl;
-	cout << "Year: ";
+	std::cout << "Enter ReceiveDate below"<<std::endl;
+	std::cout << "Year: ";
 	in >> current.receiveDate.year;
-	cout << "Month: ";
+	std::cout << "Month: ";
 	in >> current.receiveDate.month;
-	cout << "Day: ";
+	std::cout << "Day: ";
 	in >> current.receiveDate.day;
 
-	cout << "Enter manufacturer: ";
+	std::cout << "Enter manufacturer: ";
 	String newManf;
-	cin.get();
-	cin >> newManf;
+	std::cin.get();
+	std::cin >> newManf;
 	current.setManufacturer(newManf);
 
-	cout << "Enter Units (0 - kg, 1 - liters) : ";
+	std::cout << "Enter Units (0 - kg, 1 - liters) : ";
 	in >> current.unit;
 
-	cout << "Enter availableQuantity: ";
+	std::cout << "Enter availableQuantity: ";
 	in >> current.availableQuantity;
 
-	cout << "Enter Note: ";
+	std::cout << "Enter Note: ";
 	String newNote;
-	cin.get();
-	cin >> newNote;
+	std::cin.get();
+	std::cin >> newNote;
 	current.setNote(newNote);
 
 	return in;

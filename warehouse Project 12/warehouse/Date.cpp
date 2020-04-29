@@ -1,8 +1,5 @@
 #include "Date.h"
 #include<iostream>
-using std::cout;
-using std::cin;
-using std::endl;
 
 Date::Date()
 {
@@ -52,15 +49,15 @@ std::ostream& operator<<(std::ostream& out, const Date& current)
 
 std::istream& operator>>(std::istream& in, Date& current)
 {
-	cout << "enter date" << endl;
+	std::cout << "enter date" << std::endl;
 	
-	cout << "Year: ";
+	std::cout << "Year: ";
 	in >> current.year;
 	
-	cout << "Month: ";
+	std::cout << "Month: ";
 	in >> current.month;
 
-	cout << "Day: ";
+	std::cout << "Day: ";
 	in >> current.day;
 
 	return in;

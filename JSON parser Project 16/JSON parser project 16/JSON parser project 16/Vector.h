@@ -28,7 +28,6 @@ public:
 	void removeElement(const T& element);
 	void insertAtPos(int index, const T& element);
 	bool contains(const T& element)const;
-	void empty();
 
 	Vector<T>& operator=(const Vector<T>& other);
 

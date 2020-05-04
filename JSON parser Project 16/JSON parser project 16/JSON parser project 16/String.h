@@ -19,7 +19,6 @@ public:
 	int lenght()const;
 	void reset();
 
-
 	String& operator=(const String& other);
 	String& operator=(const char* other);
 	String& operator=(char s);

@@ -3,23 +3,14 @@
 #include "String.h"
 #include "Product.h"
 #include "Date.h"
+#include "Depo.h"
 
 class StorageHouse
 {
+private:
+	int totalCapacity;
+	Vector<Section> warehouse;
 public:
-	Vector<Product> products;
-	int storageCapacity;
-
 	StorageHouse();
-
-	void outputStorageHouse();
-	void inputStorageHouse();
-
-	void printProducts();
-	void add();
-	void addExisting();
-	void remove();
-	void clean();
-
-	void setProductLoc(Product& product);
 };
+

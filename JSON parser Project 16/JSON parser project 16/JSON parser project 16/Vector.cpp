@@ -165,15 +165,6 @@ bool Vector<T>::contains(const T& element)const
 	return false;
 }
 
-template<class T>
-void Vector<T>::empty()
-{
-	erase();
-	this->size = 0;
-	this->capacity = 8;
-	this->data = new T[capacity];
-}
-
 template <class T>
 Vector<T>& Vector<T>::operator=(const Vector<T>& other)
 {

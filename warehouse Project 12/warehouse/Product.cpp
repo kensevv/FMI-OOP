@@ -13,10 +13,6 @@ void Product::copy(const Product & other)
 	this->unit = other.unit;
 	this->availableQuantity = other.availableQuantity;
 	this->note = other.note;
-
-	this->storageLoc.section = other.storageLoc.section;
-	this->storageLoc.shelf = other.storageLoc.shelf;
-	this->storageLoc.cell = other.storageLoc.cell;
 }
 
 Product::Product()
@@ -29,10 +25,6 @@ Product::Product()
 	setUnit(0);
 	setAvailableQunatity(0);
 	setNote("Default Note");
-
-	setSection(0);
-	setShelf(0);
-	setCell(0);
 }
 
 Product::Product(const Product& other)
@@ -58,9 +50,6 @@ Product::Product(const char* newName,productType newType ,Date newExpiryDate, Da
 	setAvailableQunatity(newAvailableQuantity);
 	this->note = newNote;
 
-	setSection(0);
-	setShelf(0);
-	setCell(0);
 }
 
 void Product::setName(const char* newName)
@@ -127,6 +116,65 @@ void Product::setType(productType newType)
 	default:
 	{
 		std::cout << "Wrong!";
+		break;
+	};
+	}
+}
+
+void Product::setType(int newType)
+{
+	switch (newType)
+	{
+	case 0:
+	{
+		this->Type = defaultType;
+		break;
+	}
+	case 1:
+	{
+		this->Type = food;
+		break;
+	}
+
+	case 2:
+	{
+		this->Type = drinks;
+		break;
+	}
+
+	case 3:
+	{
+
+		this->Type = alchohol;
+		break;
+	}
+	case 4:
+	{
+		this->Type = parfumery;
+		break;
+	}
+
+	case 5:
+	{
+
+		this->Type = householdGoods;
+		break;
+	}
+	case 6:
+	{
+
+		this->Type = laundryGoods;
+		break;
+	}
+	case 7:
+	{
+
+		this->Type = other;
+		break;
+	}
+	default:
+	{
+		//std::cout << "Wrong!";
 		break;
 	};
 	}
@@ -216,36 +264,6 @@ const String& Product::getNote() const
 	return this->note;
 }
 
-void Product::setSection(int newSection)
-{
-	this->storageLoc.section = newSection;
-}
-
-int Product::getSection() const
-{
-	return this->storageLoc.section;
-}
-
-void Product::setShelf(int newShelf)
-{
-	this->storageLoc.shelf = newShelf;
-}
-
-int Product::getShelf() const
-{
-	return this->storageLoc.shelf;
-}
-
-void Product::setCell(int newCell)
-{
-	this->storageLoc.cell = newCell;
-}
-
-int Product::getCell() const
-{
-	return this->storageLoc.cell;
-}
-
 
 std::ostream& operator<<(std::ostream& out, const Product& current)
 {
@@ -306,7 +324,6 @@ std::ostream& operator<<(std::ostream& out, const Product& current)
 		else if (current.unit == 1) out << "(Liters)";
 	out << ": " << current.name << " - " << current.manufacturer << std::endl
 	    << "Quantity: " << current.availableQuantity << std::endl
-		<<"Location {" <<"Section: "<< current.storageLoc.section <<" Shelf: " << current.storageLoc.shelf << " Cell: " << current.storageLoc.cell<< "}" <<std::endl
 		<< "expiryDate: " << current.expiryDate << ", receiveDate: " << current.receiveDate << std::endl
 		<< "Note: " << current.note << std::endl;
 

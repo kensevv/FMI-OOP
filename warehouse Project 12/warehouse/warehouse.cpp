@@ -17,14 +17,38 @@ void swap(Product& other, Product& another);
 void fileWrite(std::ofstream& output ,Vector<Product> & allProducts);
 void fileRead(std::ifstream& input, Vector<Product>& allProducts);
 
+void ProdManagement(Vector<Product>& allProducts);
+void Print(Vector<Product>& allProducts);
+void Add();
+void Remove();
+
 bool Exit = false;
 int main()
 {
+	std::cout << "Warehouse management 1.0" << std::endl;
 	Vector<Product> allProducts;
 	String filename;
+	Menu(allProducts, filename);
 	do
 	{
-		Menu(allProducts, filename);
+		//Menu(allProducts, filename);
+		char input;
+		std::cout << "Enter (1) to open the Menu, Enter (2) for Product management." << std::endl
+			<< ">";
+		std::cin >> input;
+		std::cin.get();
+		if (input == '1')
+		{
+			Menu(allProducts, filename);
+		}
+		else if (input == '2')
+		{
+			if (filename[0] == 0) std::cout << "No information loaded. Open a file first." << std::endl;
+			else ProdManagement(allProducts);
+		}
+		else {
+			std::cout << "Wrong input, try again!" << std::endl;
+		}
 	} while (!Exit);
 	
 }
@@ -32,9 +56,10 @@ void Menu(Vector<Product>& allProducts, String& filename)
 {
 	std::cout << "Menu: Open, Close, Save, Save As, Help, Exit" << std::endl
 		<< ">";
-	String userInput;
+	
 	do
 	{
+		String userInput;
 		std::cin >> userInput;
 		toLower(userInput);
 		if (userInput == "open")
@@ -82,14 +107,13 @@ void Open(Vector<Product>& allProducts, String& filename)
 	if (filename[0] != 0)
 	{
 		std::cout << "Close First! There is already a file loaded into the memory." << std::endl;
-		Menu(allProducts, filename);
 	}
 	else 
 	{
 		do
 		{
 			std::ifstream input;
-			std::cout << "Enter file name / path" << std::endl
+			std::cout << "Enter file name / path ( path / file_name.file_format )" << std::endl
 				<< ">";
 			char file[50];
 			std::cin >> file;
@@ -97,9 +121,8 @@ void Open(Vector<Product>& allProducts, String& filename)
 			input.open(file);
 			if (input.is_open()) {
 				fileRead(input, allProducts);
-				std::cout << "The date from " << file << " has been loaded to the memory." << std::endl;
 				input.close();
-				std::cout << file << " has been closed." << std::endl;
+				std::cout << "The data from " << file << " has been loaded to the memory. " << file << " has been closed." << std::endl;
 				filename = file;
 				break;
 			}
@@ -120,22 +143,84 @@ void Close(Vector<Product>& allProducts, String& filename)
 	}
 	else
 	{
+		std::cout << "Successfully closed " << filename << ": memory resetted" << std::endl;
 		filename.reset();
 		allProducts.empty();
-		std::cout << "Successfully closed " << filename << " : memory resetted" << std::endl;
 	}
 }
 
 void Save(Vector<Product>& allProducts, String& filename)
 {
+	if (filename[0] != 0)
+	{
+		char file[50];
+		for (int i = 0; i < filename.lenght()+1; i++)
+		{
+			file[i] = filename[i];
+		}
+		std::ofstream output;
+		output.open(file);
+		if (output.is_open())
+		{
+			fileWrite(output, allProducts);
+			std::cout << "Changes have been successfully saved to " << file << std::endl;
+			filename.reset();
+			allProducts.empty();
+		}
+		else
+		{
+			std::cout << "Error, changes could not been saved." << std::endl;
+		}
+	}
+	else
+	{
+		std::cout << "There is no file opened / no products loaded into memory" << std::endl;
+	}
+	
 }
 
 void SaveAs(Vector<Product>& allProducts, String& filename)
 {
+	if (filename[0] != 0)
+	{
+		char file[50];
+		std::cout << "Input new file name." << std::endl
+			<< ">";
+		std::cin >> file;
+		std::ofstream output;
+		output.open(file);
+		if (output.is_open())
+		{
+			fileWrite(output, allProducts);
+			std::cout << "Changes have been successfully saved AS to file: " << file << std::endl;
+			filename.reset();
+			allProducts.empty();
+		}
+		else
+		{
+			std::cout << "Error, changes could not been saved." << std::endl;
+		}
+	}
+	else
+	{
+		std::cout << "There is no file opened / no products loaded into memory" << std::endl;
+	}
 }
 
 void Help()
 {
+	std::cout << "Help - commands and useful information!" << std::endl
+		<< "User Menu details:" << std::endl << std::endl
+		<< "OPEN: Loads the content of a file. If it does not exist, a new file will be created with the given name." << std::endl
+		<< "All other commands can only be executed if a file is successfully loaded" << std::endl
+		<< "Once the file is loaded, it closes it and the application no longer works with it unless the user requests to write back" << std::endl << std::endl
+		<< "CLOSE: Closes the currently open document. " << std::endl
+		<< "Closing clears the currently loaded information and the program cannot execute commands other than (Open)." << std::endl << std::endl
+		<< "SAVE: Saves the changes made back to the same file from which the data was loaded." << std::endl << std::endl
+		<< "SAVE AS: Records changes made to a new file, allowing the user to specify its path." << std::endl << std::endl
+		<< "HELP: Displays brief information about the commands supported by the program." << std::endl << std::endl
+		<< "EXIT: Exits the program." << std::endl << std::endl;
+	std::cout << "Other user interface commands" << std::endl;
 }
 
 void exit()
@@ -230,9 +315,51 @@ void fileRead(std::ifstream& input, Vector<Product>& allProducts)
 	}
 }
 
+void ProdManagement(Vector<Product>& allProducts)
+{
+	std::cout << "Product Management: Print, Add, Remove" << std::endl
+		<< ">";
+	do
+	{
+		String userInput;
+		std::cin >> userInput;
+		toLower(userInput);
+		if (userInput == "print"){
+			Print(allProducts);
+			break;
+		}
+		else if(userInput=="add"){
+			Add();
+			break;
+		}
+		else if(userInput == "remove"){
+			Remove();
+			break;
+		}
+		else {
+			std::cout << "Wrong input, try again." << std::endl
+				<< ">";
+		}
+	} while (true);
+}
 
+void Print(Vector<Product>& allProducts)
+{
+	std::cout << std::endl << "List of all available products in the warehouse:" << std::endl << std::endl;
+	for (int i = 0; i < allProducts.getSize(); i++)
+	{
+		std::cout << allProducts[i] << std::endl;
+	}
+	std::cout<<std::endl;
+}
 
+void Add()
+{
+}
 
+void Remove()
+{
+}
 
 bool isExpired(Date current, const Product& product)
 {

@@ -9,7 +9,7 @@ class StorageHouse
 {
 private:
 	int totalCapacity;
-	Vector<Section> warehouse;
+	Vector<Section> storage;
 public:
 	StorageHouse();
 };

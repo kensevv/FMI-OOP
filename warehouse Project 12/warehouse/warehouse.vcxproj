@@ -148,7 +148,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Date.cpp" />
-    <ClCompile Include="Depo.cpp" />
     <ClCompile Include="Product.cpp" />
     <ClCompile Include="StorageHouse.cpp" />
     <ClCompile Include="String.cpp" />
@@ -157,7 +156,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Date.h" />
-    <ClInclude Include="Depo.h" />
     <ClInclude Include="enumTypeProduct.h" />
     <ClInclude Include="Product.h" />
     <ClInclude Include="StorageHouse.h" />

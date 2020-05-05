@@ -3,35 +3,36 @@
 #include <iostream>
 #include <fstream>
 
-void Menu(Vector<Product>& allProducts, String & filename);
-void Open(Vector<Product>& allProducts, String & filename);
-void Close(Vector<Product>& allProducts, String& filename);
-void Save(Vector<Product>& allProducts, String& filename);
-void SaveAs(Vector<Product>& allProducts, String& filename);
+void Menu();
+void Open();
+void Close();
+void Save();
+void SaveAs();
 void Help();
 void exit();
 
 bool isExpired(Date current, const Product& product);
 void swap(Product& other, Product& another);
 
-void fileWrite(std::ofstream& output ,Vector<Product> & allProducts);
-void fileRead(std::ifstream& input, Vector<Product>& allProducts);
+void fileWrite(std::ofstream& output);
+void fileRead(std::ifstream& input);
 
-void ProdManagement(Vector<Product>& allProducts);
-void Print(Vector<Product>& allProducts);
+void ProdManagement();
+void Print();
 void Add();
 void Remove();
 
 bool Exit = false;
+Vector<Product> allProducts;
+StorageHouse warehouse;
+String filename;
 int main()
 {
 	std::cout << "Warehouse management 1.0" << std::endl;
-	Vector<Product> allProducts;
-	String filename;
-	Menu(allProducts, filename);
+
+	Menu();
 	do
 	{
-		//Menu(allProducts, filename);
 		char input;
 		std::cout << "Enter (1) to open the Menu, Enter (2) for Product management." << std::endl
 			<< ">";
@@ -39,24 +40,24 @@ int main()
 		std::cin.get();
 		if (input == '1')
 		{
-			Menu(allProducts, filename);
+			Menu();
 		}
 		else if (input == '2')
 		{
 			if (filename[0] == 0) std::cout << "No information loaded. Open a file first." << std::endl;
-			else ProdManagement(allProducts);
+			else ProdManagement();
 		}
 		else {
 			std::cout << "Wrong input, try again!" << std::endl;
 		}
 	} while (!Exit);
-	
+
 }
-void Menu(Vector<Product>& allProducts, String& filename)
+void Menu()
 {
 	std::cout << "Menu: Open, Close, Save, Save As, Help, Exit" << std::endl
 		<< ">";
-	
+
 	do
 	{
 		String userInput;
@@ -64,22 +65,22 @@ void Menu(Vector<Product>& allProducts, String& filename)
 		toLower(userInput);
 		if (userInput == "open")
 		{
-			Open(allProducts, filename);
+			Open();
 			break;
 		}
 		else if (userInput == "close")
 		{
-			Close(allProducts,filename);
+			Close();
 			break;
 		}
 		else if (userInput == "save")
 		{
-			Save(allProducts,filename);
+			Save();
 			break;
 		}
 		else if (userInput == "save as")
 		{
-			SaveAs(allProducts,filename);
+			SaveAs();
 			break;
 		}
 		else if (userInput == "help")
@@ -99,16 +100,16 @@ void Menu(Vector<Product>& allProducts, String& filename)
 		}
 
 	} while (true);
-	
+
 }
 
-void Open(Vector<Product>& allProducts, String& filename)
+void Open()
 {
 	if (filename[0] != 0)
 	{
 		std::cout << "Close First! There is already a file loaded into the memory." << std::endl;
 	}
-	else 
+	else
 	{
 		do
 		{
@@ -120,7 +121,7 @@ void Open(Vector<Product>& allProducts, String& filename)
 			std::cin.get();
 			input.open(file);
 			if (input.is_open()) {
-				fileRead(input, allProducts);
+				fileRead(input);
 				input.close();
 				std::cout << "The data from " << file << " has been loaded to the memory. " << file << " has been closed." << std::endl;
 				filename = file;
@@ -131,11 +132,11 @@ void Open(Vector<Product>& allProducts, String& filename)
 				std::cout << "ERROR! File with such path/name doesn't exist, try again." << std::endl;
 			}
 		} while (true);
-		
+
 	}
 }
 
-void Close(Vector<Product>& allProducts, String& filename)
+void Close()
 {
 	if (filename[0] == 0)
 	{
@@ -149,12 +150,12 @@ void Close(Vector<Product>& allProducts, String& filename)
 	}
 }
 
-void Save(Vector<Product>& allProducts, String& filename)
+void Save()
 {
 	if (filename[0] != 0)
 	{
 		char file[50];
-		for (int i = 0; i < filename.lenght()+1; i++)
+		for (int i = 0; i < filename.lenght() + 1; i++)
 		{
 			file[i] = filename[i];
 		}
@@ -162,7 +163,7 @@ void Save(Vector<Product>& allProducts, String& filename)
 		output.open(file);
 		if (output.is_open())
 		{
-			fileWrite(output, allProducts);
+			fileWrite(output);
 			std::cout << "Changes have been successfully saved to " << file << std::endl;
 			filename.reset();
 			allProducts.empty();
@@ -176,10 +177,10 @@ void Save(Vector<Product>& allProducts, String& filename)
 	{
 		std::cout << "There is no file opened / no products loaded into memory" << std::endl;
 	}
-	
+
 }
 
-void SaveAs(Vector<Product>& allProducts, String& filename)
+void SaveAs()
 {
 	if (filename[0] != 0)
 	{
@@ -191,7 +192,7 @@ void SaveAs(Vector<Product>& allProducts, String& filename)
 		output.open(file);
 		if (output.is_open())
 		{
-			fileWrite(output, allProducts);
+			fileWrite(output);
 			std::cout << "Changes have been successfully saved AS to file: " << file << std::endl;
 			filename.reset();
 			allProducts.empty();
@@ -228,7 +229,7 @@ void exit()
 	Exit = true;
 	std::cout << "Exiting ..." << std::endl;
 }
-void fileWrite(std::ofstream& output, Vector<Product>& allProducts)
+void fileWrite(std::ofstream& output)
 {
 	output << allProducts.getSize() << std::endl;
 	for (int i = 0; i < allProducts.getSize(); i++)
@@ -250,7 +251,7 @@ void fileWrite(std::ofstream& output, Vector<Product>& allProducts)
 		output << allProducts[i].getExpiryDate().day << std::endl;
 	}
 }
-void fileRead(std::ifstream& input, Vector<Product>& allProducts)
+void fileRead(std::ifstream& input)
 {
 	int numberProducts;
 	input >> numberProducts;
@@ -315,7 +316,7 @@ void fileRead(std::ifstream& input, Vector<Product>& allProducts)
 	}
 }
 
-void ProdManagement(Vector<Product>& allProducts)
+void ProdManagement()
 {
 	std::cout << "Product Management: Print, Add, Remove" << std::endl
 		<< ">";
@@ -324,15 +325,15 @@ void ProdManagement(Vector<Product>& allProducts)
 		String userInput;
 		std::cin >> userInput;
 		toLower(userInput);
-		if (userInput == "print"){
-			Print(allProducts);
+		if (userInput == "print") {
+			Print();
 			break;
 		}
-		else if(userInput=="add"){
+		else if (userInput == "add") {
 			Add();
 			break;
 		}
-		else if(userInput == "remove"){
+		else if (userInput == "remove") {
 			Remove();
 			break;
 		}
@@ -343,14 +344,14 @@ void ProdManagement(Vector<Product>& allProducts)
 	} while (true);
 }
 
-void Print(Vector<Product>& allProducts)
+void Print()
 {
 	std::cout << std::endl << "List of all available products in the warehouse:" << std::endl << std::endl;
 	for (int i = 0; i < allProducts.getSize(); i++)
 	{
 		std::cout << allProducts[i] << std::endl;
 	}
-	std::cout<<std::endl;
+	std::cout << std::endl;
 }
 
 void Add()

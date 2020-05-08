@@ -19,8 +19,8 @@ void fileRead(std::ifstream& input);
 
 void ProdManagement();
 void Print();
-void Add();
-void Remove();
+void Add(const Product & product);
+void Remove(const String & rName, int rQuantity);
 
 bool Exit = false;
 Vector<Product> allProducts;
@@ -123,8 +123,10 @@ void Open()
 			if (input.is_open()) {
 				fileRead(input);
 				input.close();
-				std::cout << "The data from " << file << " has been loaded to the memory. " << file << " has been closed." << std::endl;
 				filename = file;
+				warehouse.loadWarehouse(allProducts);
+				std::cout << "All products from " << file << " were loaded and distributed in the warehouse. " << std::endl
+					<< file << " has been closed." << std::endl;
 				break;
 			}
 			else
@@ -147,6 +149,7 @@ void Close()
 		std::cout << "Successfully closed " << filename << ": memory resetted" << std::endl;
 		filename.reset();
 		allProducts.empty();
+		warehouse.resetWH();
 	}
 }
 
@@ -167,6 +170,7 @@ void Save()
 			std::cout << "Changes have been successfully saved to " << file << std::endl;
 			filename.reset();
 			allProducts.empty();
+			warehouse.resetWH();
 		}
 		else
 		{
@@ -196,6 +200,7 @@ void SaveAs()
 			std::cout << "Changes have been successfully saved AS to file: " << file << std::endl;
 			filename.reset();
 			allProducts.empty();
+			warehouse.resetWH();
 		}
 		else
 		{
@@ -330,11 +335,20 @@ void ProdManagement()
 			break;
 		}
 		else if (userInput == "add") {
-			Add();
+			Product newProduct;
+			std::cin >> newProduct;
+			Add(newProduct);
 			break;
 		}
 		else if (userInput == "remove") {
-			Remove();
+			String rName;
+			int rQuantity;
+			std::cout << "Product name: ";
+			std::cin >> rName;
+			std::cout << "Quantity: ";
+			std::cin >> rQuantity;
+
+			Remove(rName, rQuantity);
 			break;
 		}
 		else {
@@ -347,19 +361,24 @@ void ProdManagement()
 void Print()
 {
 	std::cout << std::endl << "List of all available products in the warehouse:" << std::endl << std::endl;
+	/*
 	for (int i = 0; i < allProducts.getSize(); i++)
 	{
 		std::cout << allProducts[i] << std::endl;
 	}
 	std::cout << std::endl;
+	*/
+	warehouse.print();
 }
 
-void Add()
+void Add(const Product & product)
 {
+	warehouse.addProduct(product);
 }
 
-void Remove()
+void Remove(const String& rName, int rQuantity)
 {
+	warehouse.removeProduct(rName, rQuantity);
 }
 
 bool isExpired(Date current, const Product& product)

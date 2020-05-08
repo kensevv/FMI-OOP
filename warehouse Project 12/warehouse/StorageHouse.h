@@ -21,18 +21,27 @@ struct Section {
 class StorageHouse
 {
 private:
-	int totalCapacity;
 	Vector<Section> warehouse;
+	int totalCapacity;
+	int nSectors;
+	int nShelves;
+	int nCells;
 public:
 	StorageHouse();
 	StorageHouse(const StorageHouse& other);
 	StorageHouse& operator=(const StorageHouse& other);
+	void resetWH();
+
+	int getnSectors() const;
+	int getnShelves() const;
+	int getnCells() const;
 
 	Vector<Section>& getWarehouse();
 	
-	void print();
-	void loadWarehouse(const Vector<Product>& allProducts);
+	bool WHisFull();
+	void loadWarehouse(Vector<Product>& allProducts);
 	void addProduct(const Product& product);
 	void removeProduct(const String& name, int rQuantity);
+	void print();
 	void clean();
 };

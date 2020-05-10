@@ -20,7 +20,7 @@ void fileRead(std::ifstream& input);
 
 void ProdManagement();
 void Print();
-void Add(const Product & product);
+void Add(Product & product);
 void Remove(const String & rName, int rQuantity);
 void Clean();
 
@@ -112,8 +112,7 @@ void Open()
 	}
 	else
 	{
-		do
-		{
+		
 			std::ifstream input;
 			std::cout << "Enter file name / path ( path / file_name.file_format )" << std::endl
 				<< ">";
@@ -128,14 +127,17 @@ void Open()
 				warehouse.loadWarehouse(allProducts);
 				std::cout << "All products from " << file << " were loaded and distributed in the warehouse. " << std::endl
 					<< file << " has been closed." << std::endl;
-				break;
+				
 			}
 			else
 			{
 				std::cout << "ERROR! File with such path/name doesn't exist, try again." << std::endl;
+				std::ofstream output(file);
+				output.close();
+				filename = file;
+				std::cout << "New " << file << " has been created." << std::endl
+					<< file << " has been opened." << std::endl;
 			}
-		} while (true);
-
 	}
 }
 
@@ -265,17 +267,18 @@ void fileRead(std::ifstream& input)
 	for (int i = 0; i < numberProducts; i++)
 	{
 		Product product;
+
 		char readInfo[250];
-		input >> readInfo;
-		input.get();
+		input.getline(readInfo, 250);
+		//input.get();
 		product.setName(readInfo);
 
-		input >> readInfo;
-		input.get();
+		input.getline(readInfo, 250);
+		//input.get();
 		product.setManufacturer(readInfo);
 
-		input >> readInfo;
-		input.get();
+		input.getline(readInfo, 250);
+		//input.get();
 		product.setNote(readInfo);
 
 		int readQuantity;
@@ -293,30 +296,22 @@ void fileRead(std::ifstream& input)
 		input.get();
 		product.setUnit(unit);
 
-		Date newReceivedate;
-		int dateNumber;
-		input >> dateNumber;
+		
+		int year, month, day;
+		input >> year;
 		input.get();
-		newReceivedate.year = dateNumber;
-		input >> dateNumber;
+		input >> month;
 		input.get();
-		newReceivedate.month = dateNumber;
-		input >> dateNumber;
+		input >> day;
 		input.get();
-		newReceivedate.day = dateNumber;
-		product.setReceiveDate(newReceivedate.year, newReceivedate.month, newReceivedate.day);
-
-		Date newExpiredate;
-		input >> dateNumber;
+		product.setReceiveDate(year, month, day);
+		input >> day;
 		input.get();
-		newExpiredate.year = dateNumber;
-		input >> dateNumber;
+		input >> month;
 		input.get();
-		newExpiredate.month = dateNumber;
-		input >> dateNumber;
+		input >> day;
 		input.get();
-		newExpiredate.day = dateNumber;
-		product.setExpiryDate(newExpiredate.year, newExpiredate.month, newExpiredate.day);
+		product.setExpiryDate(year, month, day);
 
 		allProducts.push_back(product);
 	}
@@ -324,7 +319,7 @@ void fileRead(std::ifstream& input)
 
 void ProdManagement()
 {
-	std::cout << "Product Management: Print, Add, Remove" << std::endl
+	std::cout << "Product Management: Print, Add, Remove, Clean" << std::endl
 		<< ">";
 	do
 	{
@@ -376,25 +371,22 @@ void Print()
 	warehouse.print();
 }
 
-void Add(const Product & product)
+void Add(Product & product)
 {
 	warehouse.addProduct(product);
+	if (product.getAddedToWh() == 1) {
+		std::cout << "Product has been added to Warehouse." << std::endl;
+		allProducts.push_back(product);
+	}
 }
 
 void Remove(const String& rName, int rQuantity)
 {
-	warehouse.removeProduct(rName, rQuantity);
+	warehouse.removeProduct(rName, rQuantity, allProducts);
 }
 
 void Clean()
 {
 	warehouse.clean(allProducts);
 	std::cout << "Your Warehouse has been cleaned from all expired products." << std::endl;
-}
-
-void swap(Product& other, Product& another)
-{
-	Product temp = other;
-	other = another;
-	another = temp;
 }

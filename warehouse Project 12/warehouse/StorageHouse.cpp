@@ -1,5 +1,14 @@
 #include "StorageHouse.h"
 
+/* sklada e konstantno zadaden v programata
+sustoi se ot 2 sekcii s po 4 shkafa vsqka ot koqto ima po 10 kletki
+vsqka kletka moje da sudurja samo ednoimenni produkti, toest primerno 1 kletka ima samo Koka koli
+vsqka kletka moje da sudurja samo 2 partidi ot suotvetniq produkt (vsqka partida e primerno s razlichni srokove na godnosti no sushtiq produkt
+
+pri dobavqne na nov produkt v sklada se gleda dali ima veche sushtestvuvasht takuv, ako da i to ima ne poveche ot 1 partida produkta se dobavq
+v protiven sluchay sklada ne priema 3ta partida ot produkta predi da prodade starite.
+ako nqma produkt s takova ime produkta se dobavq v prazna kletka.
+*/
 StorageHouse::StorageHouse()
 {
 	Section section;
@@ -39,6 +48,16 @@ StorageHouse& StorageHouse::operator=(const StorageHouse& other)
 
 void StorageHouse::resetWH()
 {
+	for (int section = 0; section < nSectors; section++)
+	{
+		for (int shelf = 0; shelf < nShelves; shelf++)
+		{
+			for (int cell = 0; cell < nCells; cell++)
+			{
+				warehouse[section].sections[shelf].shelves[cell].products.empty();
+			}
+		}
+	}
 }
 
 int StorageHouse::getnSectors() const
@@ -81,12 +100,6 @@ bool StorageHouse::WHisFull()
 
 void StorageHouse::loadWarehouse(Vector<Product>& allProducts)
 {
-	/*
-	for (int i = 0; i < allProducts.getSize(); i++)
-	{
-		addProduct(allProducts[i]);
-	}
-	*/
 	int productsNumber = 0;
 	for (int section = 0; section < nSectors; section++) 
 	{
@@ -119,13 +132,166 @@ void StorageHouse::loadWarehouse(Vector<Product>& allProducts)
 	}
 }
 
-void StorageHouse::addProduct(const Product& product)
+void StorageHouse::addProduct(Product& product)
 {
+	if (!WHisFull())
+	{
+		for (int section = 0; section < nSectors; section++)
+		{
+			for (int shelf = 0; shelf < nShelves; shelf++)
+			{
+				for (int cell = 0; cell < nCells; cell++)
+				{
+					if (warehouse[section].sections[shelf].shelves[cell].products.getSize() == 1)
+					{
+						if (product.getName() == warehouse[section].sections[shelf].shelves[cell].products[0].getName())
+						{
+							if (product.getAddedToWh() == 0)
+							{
+								product.setAddedToWh(1);
+								warehouse[section].sections[shelf].shelves[cell].products.push_back(product);
+								std::cout << "Product has been added to - Section:" << section << " Shelf:" << shelf << " Cell" << cell << "." << std::endl;
+							}
+						}
+					}
+				}
+			}
+		}
 
+		if (product.getAddedToWh() == 0)
+		{
+			for (int section = 0; section < nSectors; section++)
+			{
+				for (int shelf = 0; shelf < nShelves; shelf++)
+				{
+					for (int cell = 0; cell < nCells; cell++)
+					{
+						if (warehouse[section].sections[shelf].shelves[cell].products.getSize() == 0)
+						{
+							if (product.getAddedToWh() == 0)
+							{
+								product.setAddedToWh(1);
+								warehouse[section].sections[shelf].shelves[cell].products.push_back(product);
+								std::cout << "Product has been added to - Section:" << section << " Shelf:" << shelf << " Cell" << cell << "." << std::endl;
+							}
+						}
+					}
+				}
+			}
+		}
+		if (product.getAddedToWh() == 0) std::cout << "There are already 2 batches from " << product.getName() << "." << std::endl;
+	}
+	else
+	{
+		std::cout << "ERROR: Your WareHouse is full" << std::endl;
+	}
 }
 
-void StorageHouse::removeProduct(const String& name, int rQuantity)
+void StorageHouse::removeProduct(const String& name, int rQuantity, Vector<Product>& allProducts)
 {
+	for (int section = 0; section < nSectors; section++)
+	{
+		for (int shelf = 0; shelf < nShelves; shelf++)
+		{
+			for (int cell = 0; cell < nCells; cell++)
+			{
+				if (warehouse[section].sections[shelf].shelves[cell].products.getSize() != 0)
+				{
+					if (warehouse[section].sections[shelf].shelves[cell].products[0].getName() == name)
+					{
+						if (warehouse[section].sections[shelf].shelves[cell].products.getSize() == 1)
+						{
+							if (warehouse[section].sections[shelf].shelves[cell].products[0].getAvailableQuantity() - rQuantity <= 0)
+							{
+								std::cout << "You are trying to remove all or more than the available quantity." << std::endl
+									<< "Do you want to remove all available quantity? (yes,no)" << std::endl
+									<< ">";
+								std::cin.get();
+								String yesno;
+								std::cin >> yesno;
+								toLower(yesno);
+								if (yesno == "yes")
+								{
+									warehouse[section].sections[shelf].shelves[cell].products.removeAtIndex(0);
+									std::cout << section << " Shelf " << shelf << " Cell " << cell << std::endl
+										<< name << " has been removed from the Warehouse" << std::endl;
+									allProducts.removeElement(warehouse[section].sections[shelf].shelves[cell].products[0]);
+								}
+							}
+							else 
+							{
+								warehouse[section].sections[shelf].shelves[cell].products[0].setAvailableQunatity
+								(warehouse[section].sections[shelf].shelves[cell].products[0].getAvailableQuantity() - rQuantity);
+								std::cout << rQuantity << " were removed from Section " << section << " Shelf " << shelf << " Cell " << cell << std::endl
+									<< name << "'s batch with earlies expiry date." << std::endl
+									<< "Remaining quantity: " << warehouse[section].sections[shelf].shelves[cell].products[0].getAvailableQuantity() << std::endl;
+							}
+						}
+						else if (warehouse[section].sections[shelf].shelves[cell].products.getSize() == 2)
+						{
+							if (warehouse[section].sections[shelf].shelves[cell].products[0].getExpiryDate()
+								< warehouse[section].sections[shelf].shelves[cell].products[1].getExpiryDate())
+							{
+								if (warehouse[section].sections[shelf].shelves[cell].products[0].getAvailableQuantity() - rQuantity <= 0)
+								{
+									std::cout << "You are trying to remove more than the Available Quantity" << std::endl
+										<< "Do you want to remove all available quantity from the batch with earliest expiry date? (yes,no)" << std::endl
+										<< ">";
+									std::cin.get();
+									String yesno;
+									std::cin >> yesno;
+									toLower(yesno);
+									if (yesno == "yes")
+									{
+										warehouse[section].sections[shelf].shelves[cell].products.removeAtIndex(0);
+										std::cout << section << " Shelf " << shelf << " Cell " << cell << std::endl
+											<< name << "' batch has been removed from the Warehouse" << std::endl;
+										allProducts.removeElement(warehouse[section].sections[shelf].shelves[cell].products[0]);
+									}
+								}
+								else
+								{
+									warehouse[section].sections[shelf].shelves[cell].products[0].setAvailableQunatity
+									(warehouse[section].sections[shelf].shelves[cell].products[0].getAvailableQuantity() - rQuantity);
+									std::cout << rQuantity << " were removed from Section " << section << " Shelf " << shelf << " Cell " << cell << std::endl
+										<< name << "'s batch with earlies expiry date." << std::endl
+										<< "Remaining quantity: " << warehouse[section].sections[shelf].shelves[cell].products[0].getAvailableQuantity() << std::endl;
+								}
+							}
+							else
+							{
+								if (warehouse[section].sections[shelf].shelves[cell].products[1].getAvailableQuantity() - rQuantity < 0)
+								{
+									std::cout << "You are trying to remove more than the Available Quantity" << std::endl
+										<< "Do you want to remove all available quantity from the batch with earliest expiry date? (yes,no)" << std::endl
+										<< ">";
+									std::cin.get();
+									String yesno;
+									std::cin >> yesno;
+									toLower(yesno);
+									if (yesno == "yes")
+									{
+										warehouse[section].sections[shelf].shelves[cell].products.removeAtIndex(1);
+										std::cout << section << " Shelf " << shelf << " Cell " << cell << std::endl
+											<< name << "' batch has been removed from the Warehouse" << std::endl;
+										allProducts.removeElement(warehouse[section].sections[shelf].shelves[cell].products[1]);
+									}
+								}
+								else
+								{
+									warehouse[section].sections[shelf].shelves[cell].products[1].setAvailableQunatity
+									(warehouse[section].sections[shelf].shelves[cell].products[1].getAvailableQuantity() - rQuantity);
+									std::cout << rQuantity << " were removed from Section " << section << " Shelf " << shelf << " Cell " << cell << std::endl
+										<< name << "'s batch with earlies expiry date." << std::endl
+										<< "Remaining quantity: " << warehouse[section].sections[shelf].shelves[cell].products[1].getAvailableQuantity() << std::endl;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 }
 
 void StorageHouse::print()
@@ -152,8 +318,6 @@ void StorageHouse::clean(Vector<Product>& allProducts)
 	Date current;
 	std::cin >> current;
 	
-	
-
 	std::cout << "List of removed Products and their location in the WH:" << std::endl;
 	for (int section = 0; section < nSectors; section++)
 	{

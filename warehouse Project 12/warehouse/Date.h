@@ -18,4 +18,4 @@ struct Date
 	friend std::istream& operator>>(std::istream& in, Date& current);
 };
 	bool operator==(const Date& left, const Date& right);
-
+	bool operator<(const Date& curr, const Date& other);

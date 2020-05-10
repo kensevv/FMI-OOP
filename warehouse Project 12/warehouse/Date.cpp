@@ -29,12 +29,10 @@ bool Date::operator==(const Date& other)
 	return (this->year == other.year
 		&& this->month == other.month
 		&& this->day == other.day);
-
 }
 
 bool Date::operator<(const Date& other)
 {
-
 	if (this->year > other.year) return false;
 	if (this->month > other.month) return false;
 	if (this->day > other.day) return false;
@@ -80,4 +78,12 @@ bool operator==(const Date& left, const Date& right)
 		return true;
 	}
 	return false;
+}
+
+bool operator<(const Date& curr, const Date& other)
+{
+	if (curr.year > other.year) return false;
+	if (curr.month > other.month) return false;
+	if (curr.day > other.day) return false;
+	return true;
 }

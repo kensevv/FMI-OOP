@@ -40,8 +40,8 @@ public:
 	
 	bool WHisFull();
 	void loadWarehouse(Vector<Product>& allProducts);
-	void addProduct(const Product& product);
-	void removeProduct(const String& name, int rQuantity);
+	void addProduct(Product& product);
+	void removeProduct(const String& name, int rQuantity, Vector<Product>& allProducts);
 	void print();
 	void clean(Vector<Product>& allProducts);
 };

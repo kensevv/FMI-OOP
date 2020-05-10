@@ -20,11 +20,19 @@ Date& Date::operator=(const Date& other)
 	this->year = other.year;
 	this->month = other.month;
 	this->day = other.day;
-	
+
 	return *this;
 }
 
-bool Date::operator<(const Date& other )
+bool Date::operator==(const Date& other) 
+{
+	return (this->year == other.year
+		&& this->month == other.month
+		&& this->day == other.day);
+
+}
+
+bool Date::operator<(const Date& other)
 {
 
 	if (this->year > other.year) return false;
@@ -50,10 +58,10 @@ std::ostream& operator<<(std::ostream& out, const Date& current)
 std::istream& operator>>(std::istream& in, Date& current)
 {
 	std::cout << "enter date" << std::endl;
-	
+
 	std::cout << "Year: ";
 	in >> current.year;
-	
+
 	std::cout << "Month: ";
 	in >> current.month;
 
@@ -61,4 +69,15 @@ std::istream& operator>>(std::istream& in, Date& current)
 	in >> current.day;
 
 	return in;
+}
+
+bool operator==(const Date& left, const Date& right)
+{
+	if (left.year == right.year
+		&& left.month == right.month
+		&& left.day == right.day)
+	{
+		return true;
+	}
+	return false;
 }

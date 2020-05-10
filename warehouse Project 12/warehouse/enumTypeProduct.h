@@ -1,7 +1,7 @@
 #pragma once
 
 enum productType {
-	defaultType,
+	defaultType=0,
 	food,
 	drinks,
 	alchohol,

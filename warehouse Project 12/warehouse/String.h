@@ -45,6 +45,7 @@ public:
 	friend std::istream& operator>>(std::istream& in, String& s);
 };
 
+bool operator ==(const String& left, const String& right);
 
 String operator+ (char c, String s);
 

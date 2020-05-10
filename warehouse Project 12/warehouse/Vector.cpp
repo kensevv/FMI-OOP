@@ -114,23 +114,32 @@ size_t Vector<T>::getSize() const
 template <class T>
 void Vector<T>::removeAtIndex(int index)
 {
-
-	for (int i = index; i < this->size - 1; i++)
+	if (index < this->size && index >= 0)
 	{
-		this->data[i] = this->data[i + 1];
+		for (int i = index; i < this->size - 1; i++)
+		{
+			this->data[i] = this->data[i + 1];
+		}
+		this->size--;
 	}
-	this->size--;
 }
 
 template <class T>
 void Vector<T>::removeElement(const T& element)
 {
-	int index;
+	int index = -1;
 	for (int i = 0; i < this->size; i++)
 	{
-		if (this->data[i] == element) index = i;
+		if (this->data[i] == element)
+		{
+			index = i;
+			break;
+		}
 	}
-	removeAtIndex(index);
+	if (index != -1)
+	{
+		removeAtIndex(index);
+	}
 }
 
 template <class T>

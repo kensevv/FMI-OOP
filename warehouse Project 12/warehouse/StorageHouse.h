@@ -43,5 +43,5 @@ public:
 	void addProduct(const Product& product);
 	void removeProduct(const String& name, int rQuantity);
 	void print();
-	void clean();
+	void clean(Vector<Product>& allProducts);
 };

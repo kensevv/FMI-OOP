@@ -11,7 +11,8 @@ void SaveAs();
 void Help();
 void exit();
 
-bool isExpired(Date current, const Product& product);
+
+
 void swap(Product& other, Product& another);
 
 void fileWrite(std::ofstream& output);
@@ -21,6 +22,7 @@ void ProdManagement();
 void Print();
 void Add(const Product & product);
 void Remove(const String & rName, int rQuantity);
+void Clean();
 
 bool Exit = false;
 Vector<Product> allProducts;
@@ -51,7 +53,6 @@ int main()
 			std::cout << "Wrong input, try again!" << std::endl;
 		}
 	} while (!Exit);
-
 }
 void Menu()
 {
@@ -351,6 +352,10 @@ void ProdManagement()
 			Remove(rName, rQuantity);
 			break;
 		}
+		else if (userInput == "clean") {
+			Clean();
+			break;
+		}
 		else {
 			std::cout << "Wrong input, try again." << std::endl
 				<< ">";
@@ -381,10 +386,10 @@ void Remove(const String& rName, int rQuantity)
 	warehouse.removeProduct(rName, rQuantity);
 }
 
-bool isExpired(Date current, const Product& product)
+void Clean()
 {
-	if (current > product.getExpiryDate()) return true;
-	else return false;
+	warehouse.clean(allProducts);
+	std::cout << "Your Warehouse has been cleaned from all expired products." << std::endl;
 }
 
 void swap(Product& other, Product& another)

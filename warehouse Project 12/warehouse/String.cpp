@@ -176,6 +176,14 @@ std::istream& operator>>(std::istream& in, String& s)
 	return in;
 }
 
+bool operator==(const String& left, const String& right)
+{
+	String a = left;
+	String b = right;
+	if (a == b) return true;
+	return false;
+}
+
 String operator+(char c, String s)
 {
 	String result;
@@ -183,7 +191,6 @@ String operator+(char c, String s)
 	result = c;
 	result = result + s;
 	return result;
-
 }
 
 String toUpper(String s)

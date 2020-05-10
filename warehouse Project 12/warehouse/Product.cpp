@@ -3,7 +3,7 @@
 #include <iostream>
 
 
-void Product::copy(const Product & other)
+void Product::copy(const Product& other)
 {
 	this->name = other.name;
 	this->setType(other.Type);
@@ -13,6 +13,8 @@ void Product::copy(const Product & other)
 	this->unit = other.unit;
 	this->availableQuantity = other.availableQuantity;
 	this->note = other.note;
+
+	this->addedToWh = other.addedToWh;
 }
 
 Product::Product()
@@ -25,6 +27,8 @@ Product::Product()
 	setUnit(0);
 	setAvailableQunatity(0);
 	setNote("Default Note");
+
+	setAddedToWh(0);
 }
 
 Product::Product(const Product& other)
@@ -35,11 +39,12 @@ Product::Product(const Product& other)
 Product& Product::operator=(const Product& other)
 {
 	if (this != &other) this->copy(other);
-	
+
 	return *this;
 }
 
-Product::Product(const char* newName,productType newType ,Date newExpiryDate, Date newReceiveDate, const char* newManufacturer, bool newUnit, int newAvailableQuantity, const char* newNote)
+Product::Product(const char* newName, productType newType, Date newExpiryDate, Date newReceiveDate, 
+	const char* newManufacturer, bool newUnit, int newAvailableQuantity, const char* newNote)
 {
 	this->name = newName;
 	this->setType(newType);
@@ -50,6 +55,7 @@ Product::Product(const char* newName,productType newType ,Date newExpiryDate, Da
 	setAvailableQunatity(newAvailableQuantity);
 	this->note = newNote;
 
+	this->addedToWh = false;
 }
 
 void Product::setName(const char* newName)
@@ -64,7 +70,7 @@ void Product::setName(const String& newName)
 
 void Product::setType(productType newType)
 {
-	switch (newType) 
+	switch (newType)
 	{
 	case 0:
 	{
@@ -241,7 +247,7 @@ const Date& Product::getExpiryDate() const
 
 const Date& Product::getReceiveDate() const
 {
-	return this-> receiveDate;
+	return this->receiveDate;
 }
 
 const String& Product::getManufacturer() const
@@ -264,66 +270,89 @@ const String& Product::getNote() const
 	return this->note;
 }
 
+void Product::setAddedToWh(bool added)
+{
+	this->addedToWh = added;
+}
+
+bool Product::getAddedToWh() const
+{
+	return this->addedToWh;
+}
+
+bool Product::isExpired(Date current)
+{
+	if (current > this->expiryDate) return true;
+	else return false;
+}
+
+bool Product::operator==(const Product& other) const
+{
+	return (this->name == other.name && this->manufacturer == other.manufacturer && this->note == other.note &&
+		this->Type == other.Type && this->unit == other.unit &&
+		this->expiryDate == other.expiryDate && this->receiveDate == other.receiveDate &&
+		this->availableQuantity == other.availableQuantity);
+}
 
 std::ostream& operator<<(std::ostream& out, const Product& current)
 {
-		switch (current.Type)
-		{
-		case 0:
-		{
-			out << "(Default) ";
-			break;
-		}
-		case 1:
-		{
-			out << "(Food) ";
-			break;
-		}
+	switch (current.Type)
+	{
+	case 0:
+	{
+		out << "(Default) ";
+		break;
+	}
+	case 1:
+	{
+		out << "(Food) ";
+		break;
+	}
 
-		case 2:
-		{
-			out << "(Drinks) ";
-			break;
-		}
+	case 2:
+	{
+		out << "(Drinks) ";
+		break;
+	}
 
-		case 3:
-		{
-			out << "(Alchohol) ";
-			break;
-		}
-		case 4:
-		{
-			out << "(Parfumery) ";
-			break;
-		}
+	case 3:
+	{
+		out << "(Alchohol) ";
+		break;
+	}
+	case 4:
+	{
+		out << "(Parfumery) ";
+		break;
+	}
 
-		case 5:
-		{
+	case 5:
+	{
 
-			out << "(Household Goods) ";
-			break;
-		}
-		case 6:
-		{
+		out << "(Household Goods) ";
+		break;
+	}
+	case 6:
+	{
 
-			out << "(Laundry Goods) ";
-			break;
-		}
-		case 7:
-		{
+		out << "(Laundry Goods) ";
+		break;
+	}
+	case 7:
+	{
 
-			out << "(Other) ";
-			break;
-		}
-		default:
-		{
-			break;
-		};
-		}
-		if (current.unit == 0) out << "(KGs)";
-		else if (current.unit == 1) out << "(Liters)";
+		out << "(Other) ";
+		break;
+	}
+	default:
+	{
+		break;
+	};
+	}
+	if (current.unit == 0) out << "(KGs)";
+	else if (current.unit == 1) out << "(Liters)";
 	out << ": " << current.name << " - " << current.manufacturer << std::endl
-	    << "Quantity: " << current.availableQuantity << std::endl
+		<< "Quantity: " << current.availableQuantity << std::endl
 		<< "expiryDate: " << current.expiryDate << ", receiveDate: " << current.receiveDate << std::endl
 		<< "Note: " << current.note << std::endl;
 
@@ -394,7 +423,7 @@ std::istream& operator>>(std::istream& in, Product& current) {
 		break;
 	};
 	}
-	
+
 	std::cout << "Enter expiryDate below" << std::endl;
 	std::cout << "Year: ";
 	in >> current.expiryDate.year;
@@ -402,9 +431,9 @@ std::istream& operator>>(std::istream& in, Product& current) {
 	in >> current.expiryDate.month;
 	std::cout << "Day: ";
 	in >> current.expiryDate.day;
-	
 
-	std::cout << "Enter ReceiveDate below"<<std::endl;
+
+	std::cout << "Enter ReceiveDate below" << std::endl;
 	std::cout << "Year: ";
 	in >> current.receiveDate.year;
 	std::cout << "Month: ";

@@ -15,6 +15,8 @@ private:
 	bool unit; // 0 - kg, 1 - l;
 	int availableQuantity;
 	String note;
+
+	bool addedToWh;
 	
 	void copy(const Product & other);
 
@@ -37,7 +39,7 @@ public:
 	void setAvailableQunatity(int newAvailableQuantity);
 	void setNote(const char* newNote);
 	void setNote(const String& newNote);
-	
+
 	const String& getName()const;
 	productType getType()const;
 	const Date& getExpiryDate() const;
@@ -47,6 +49,14 @@ public:
 	int getAvailableQuantity()const;
 	const String& getNote()const;
 
+	void setAddedToWh(bool added);
+	bool getAddedToWh() const;
+
+	bool isExpired(Date current);
+
+
 	friend std::ostream& operator<<(std::ostream& out, const Product& current);
 	friend std::istream& operator>>(std::istream& in, Product& current);
+
+	bool operator==(const Product& other) const;
 };

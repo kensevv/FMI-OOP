@@ -424,26 +424,15 @@ std::istream& operator>>(std::istream& in, Product& current) {
 	};
 	}
 
+	in.get();
 	std::cout << "Enter expiryDate below" << std::endl;
-	std::cout << "Year: ";
-	in >> current.expiryDate.year;
-	std::cout << "Month: ";
-	in >> current.expiryDate.month;
-	std::cout << "Day: ";
-	in >> current.expiryDate.day;
-
+	in >> current.expiryDate;
 
 	std::cout << "Enter ReceiveDate below" << std::endl;
-	std::cout << "Year: ";
-	in >> current.receiveDate.year;
-	std::cout << "Month: ";
-	in >> current.receiveDate.month;
-	std::cout << "Day: ";
-	in >> current.receiveDate.day;
+	in >> current.receiveDate;
 
 	std::cout << "Enter manufacturer: ";
 	String newManf;
-	std::cin.get();
 	std::cin >> newManf;
 	current.setManufacturer(newManf);
 

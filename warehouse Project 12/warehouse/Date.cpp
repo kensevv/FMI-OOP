@@ -1,5 +1,6 @@
 #include "Date.h"
-#include<iostream>
+#include <iostream>
+#include "String.h"
 
 Date::Date()
 {
@@ -55,16 +56,53 @@ std::ostream& operator<<(std::ostream& out, const Date& current)
 
 std::istream& operator>>(std::istream& in, Date& current)
 {
-	//std::cout << "enter date" << std::endl;
+	bool correct = false;
+	int _year, _month, _day;
+	do
+	{
+		_year = 0;
+		_month = 0;
+		_day = 0;
+		String date;
+		std::cout << "YY-MM-DD: ";
+		in >> date;
 
-	std::cout << "Year: ";
-	in >> current.year;
+		String year, month, day;
+		int index = 0;
+		for (int i = 0; i < 3; i++)
+		{
+			for (int j = index; j < date.lenght(); j++)
+			{
+				if (date[j] == '-')
+				{
+					index = j + 1;
+					break;
+				}
+				if (i == 0) year = year + date[j];
+				else if (i == 1) month = month + date[j];
+				else day = day + date[j];
+			}
+		}		
 
-	std::cout << "Month: ";
-	in >> current.month;
+		if (year.lenght() == 4 &&
+			(month.lenght() == 2 || month.lenght() == 1) &&
+			(day.lenght() == 1 || day.lenght() == 2))
+		{
+			for (int i = 0; i < year.lenght() ; i++) _year = _year *10 + (year[i] - '0');
+			for (int i = 0; i < month.lenght(); i++) _month = _month * 10 + (month[i] - '0');
+			for (int i = 0; i < day.lenght(); i++) _day = _day * 10 + (day[i] - '0');
+		}
 
-	std::cout << "Day: ";
-	in >> current.day;
+		if (_year > 999 && _year < 10000 &&
+			_month > 0 && _month < 13 &&
+			_day > 0 && _day < 32) correct = true;
+		else std::cout << "Wrong format." << std::endl;
+
+	} while (!correct);
+	
+	current.year = _year;
+	current.month = _month;
+	current.day = _day;
 
 	return in;
 }

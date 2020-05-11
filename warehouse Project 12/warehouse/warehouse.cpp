@@ -35,7 +35,8 @@ int main()
 	std::cout << "Warehouse management 1.0" << std::endl;
 	std::cout << "Input current Date!" << std::endl;
 	std::cin >> currentDate;
-	std::cin.get();
+	//
+	std::cout << currentDate;
 	Menu();
 	do
 	{
@@ -140,8 +141,7 @@ void Open()
 				input.close();
 				filename = file;
 				warehouse.loadWarehouse(allProducts);
-				std::cout << "All products from " << file << " were loaded and distributed in the warehouse. " << std::endl
-					<< file << " has been closed." << std::endl;
+				std::cout << "All products from " << file << " were loaded and distributed in the warehouse. " << file << " has been closed." << std::endl;
 			}
 			else
 			{
@@ -149,8 +149,7 @@ void Open()
 				std::ofstream output(file);
 				output.close();
 				filename = file;
-				std::cout << "New " << file << " has been created." << std::endl
-					<< file << " has been opened." << std::endl;
+				std::cout << "New " << file << " has been created. " << file << " has been opened." << std::endl;
 			}
 	}
 }
@@ -333,7 +332,7 @@ void fileRead(std::ifstream& input)
 
 void ProdManagement()
 {
-	std::cout << "Product Management: Print, Add, Remove, Clean" << std::endl
+	std::cout << "Product Management: Print, Add, Remove, Clean \n" << std::endl
 		<< ">";
 	do
 	{
@@ -386,7 +385,7 @@ void Add(Product & product)
 {
 	warehouse.addProduct(product);
 	if (product.getAddedToWh() == 1) {
-		std::cout << "Product has been added to Warehouse." << std::endl;
+		std::cout << "Product has been successfully added to Warehouse." << std::endl;
 		allProducts.push_back(product);
 	}
 }
@@ -404,11 +403,11 @@ void Clean()
 
 void getWHinfo()
 {
-	std::cout << "WH's total capacity is: " << warehouse.getTotalCapacity() << std::endl
+	std::cout << std::endl << "WH's total capacity is: " << warehouse.getTotalCapacity() << std::endl
 		<< "Total products in WH: " << warehouse.getTotalWHQuantity() << std::endl;
 	if (warehouse.getTotalExpiredProducts(currentDate) > 0)
 	{
-		std::cout << "There are " << warehouse.getTotalExpiredProducts(currentDate) << "expired products in your WH!" << std::endl
+		std::cout << "There are " << warehouse.getTotalExpiredProducts(currentDate) << " expired products in your WH!" << std::endl
 			<< "It is recommended you 'clean' your WH from all expired products." << std::endl;
 	}
 	else std::cout << "There are no expired products in WH." << std::endl;

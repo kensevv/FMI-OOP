@@ -32,9 +32,13 @@ public:
 	StorageHouse& operator=(const StorageHouse& other);
 	void resetWH();
 
+	int getTotalCapacity() const;
 	int getnSectors() const;
 	int getnShelves() const;
 	int getnCells() const;
+
+	int getTotalWHQuantity()const;
+	int getTotalExpiredProducts(const Date & current) const;
 
 	Vector<Section>& getWarehouse();
 	
@@ -43,5 +47,5 @@ public:
 	void addProduct(Product& product);
 	void removeProduct(const String& name, int rQuantity, Vector<Product>& allProducts);
 	void print();
-	void clean(Vector<Product>& allProducts);
+	void clean(Vector<Product>& allProducts, const Date& current);
 };

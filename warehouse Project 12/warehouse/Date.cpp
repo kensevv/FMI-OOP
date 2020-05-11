@@ -55,7 +55,7 @@ std::ostream& operator<<(std::ostream& out, const Date& current)
 
 std::istream& operator>>(std::istream& in, Date& current)
 {
-	std::cout << "enter date" << std::endl;
+	//std::cout << "enter date" << std::endl;
 
 	std::cout << "Year: ";
 	in >> current.year;

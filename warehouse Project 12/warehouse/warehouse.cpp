@@ -2,6 +2,9 @@
 #include "StorageHouse.h"
 #include <iostream>
 #include <fstream>
+#include <stdlib.h>
+
+void clearScreen();
 
 void Menu();
 void Open();
@@ -10,11 +13,6 @@ void Save();
 void SaveAs();
 void Help();
 void exit();
-
-
-
-void swap(Product& other, Product& another);
-
 void fileWrite(std::ofstream& output);
 void fileRead(std::ifstream& input);
 
@@ -23,18 +21,25 @@ void Print();
 void Add(Product & product);
 void Remove(const String & rName, int rQuantity);
 void Clean();
+void getWHinfo();
 
 bool Exit = false;
+
 Vector<Product> allProducts;
 StorageHouse warehouse;
 String filename;
+Date currentDate;
+
 int main()
 {
 	std::cout << "Warehouse management 1.0" << std::endl;
-
+	std::cout << "Input current Date!" << std::endl;
+	std::cin >> currentDate;
+	std::cin.get();
 	Menu();
 	do
 	{
+		getWHinfo();
 		char input;
 		std::cout << "Enter (1) to open the Menu, Enter (2) for Product management." << std::endl
 			<< ">";
@@ -54,6 +59,11 @@ int main()
 		}
 	} while (!Exit);
 }
+void clearScreen()
+{
+	system("CLS");
+	std::cout << "Warehouse management 1.0" << std::endl;
+}
 void Menu()
 {
 	std::cout << "Menu: Open, Close, Save, Save As, Help, Exit" << std::endl
@@ -66,26 +76,31 @@ void Menu()
 		toLower(userInput);
 		if (userInput == "open")
 		{
+			clearScreen();
 			Open();
 			break;
 		}
 		else if (userInput == "close")
 		{
+			clearScreen();
 			Close();
 			break;
 		}
 		else if (userInput == "save")
 		{
+			clearScreen();
 			Save();
 			break;
 		}
 		else if (userInput == "save as")
 		{
+			clearScreen();
 			SaveAs();
 			break;
 		}
 		else if (userInput == "help")
 		{
+			clearScreen();
 			Help();
 			break;
 		}
@@ -127,7 +142,6 @@ void Open()
 				warehouse.loadWarehouse(allProducts);
 				std::cout << "All products from " << file << " were loaded and distributed in the warehouse. " << std::endl
 					<< file << " has been closed." << std::endl;
-				
 			}
 			else
 			{
@@ -327,12 +341,14 @@ void ProdManagement()
 		std::cin >> userInput;
 		toLower(userInput);
 		if (userInput == "print") {
+			clearScreen();
 			Print();
 			break;
 		}
 		else if (userInput == "add") {
 			Product newProduct;
 			std::cin >> newProduct;
+			clearScreen();
 			Add(newProduct);
 			break;
 		}
@@ -344,10 +360,12 @@ void ProdManagement()
 			std::cout << "Quantity: ";
 			std::cin >> rQuantity;
 
+			clearScreen();
 			Remove(rName, rQuantity);
 			break;
 		}
 		else if (userInput == "clean") {
+			clearScreen();
 			Clean();
 			break;
 		}
@@ -361,13 +379,6 @@ void ProdManagement()
 void Print()
 {
 	std::cout << std::endl << "List of all available products in the warehouse:" << std::endl << std::endl;
-	/*
-	for (int i = 0; i < allProducts.getSize(); i++)
-	{
-		std::cout << allProducts[i] << std::endl;
-	}
-	std::cout << std::endl;
-	*/
 	warehouse.print();
 }
 
@@ -387,6 +398,18 @@ void Remove(const String& rName, int rQuantity)
 
 void Clean()
 {
-	warehouse.clean(allProducts);
+	warehouse.clean(allProducts, currentDate);
 	std::cout << "Your Warehouse has been cleaned from all expired products." << std::endl;
+}
+
+void getWHinfo()
+{
+	std::cout << "WH's total capacity is: " << warehouse.getTotalCapacity() << std::endl
+		<< "Total products in WH: " << warehouse.getTotalWHQuantity() << std::endl;
+	if (warehouse.getTotalExpiredProducts(currentDate) > 0)
+	{
+		std::cout << "There are " << warehouse.getTotalExpiredProducts(currentDate) << "expired products in your WH!" << std::endl
+			<< "It is recommended you 'clean' your WH from all expired products." << std::endl;
+	}
+	else std::cout << "There are no expired products in WH." << std::endl;
 }

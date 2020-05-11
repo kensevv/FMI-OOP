@@ -16,7 +16,7 @@ StorageHouse::StorageHouse()
 	{
 		warehouse.push_back(section);
 	}
-	totalCapacity = 4000;
+	totalCapacity = 1000;
 	nSectors = 2;
 	nShelves = 4;
 	nCells = 10;
@@ -60,6 +60,11 @@ void StorageHouse::resetWH()
 	}
 }
 
+int StorageHouse::getTotalCapacity() const
+{
+	return this->totalCapacity;
+}
+
 int StorageHouse::getnSectors() const
 {
 	return this->nSectors;
@@ -73,6 +78,49 @@ int StorageHouse::getnShelves() const
 int StorageHouse::getnCells() const
 {
 	return this->nCells;
+}
+
+int StorageHouse::getTotalWHQuantity() const
+{
+	int result = 0;
+	for (int section = 0; section < nSectors; section++)
+	{
+		for (int shelf = 0; shelf < nShelves; shelf++)
+		{
+			for (int cell = 0; cell < nCells; cell++)
+			{
+				for (int i = 0; i < warehouse[section].sections[shelf].shelves[cell].products.getSize() ; i++)
+				{
+					result += warehouse[section].sections[shelf].shelves[cell].products[i].getAvailableQuantity();
+				}
+
+			}
+		}
+	}
+	return result;
+}
+
+int StorageHouse::getTotalExpiredProducts(const Date& current) const
+{
+	int result = 0;
+	for (int section = 0; section < nSectors; section++)
+	{
+		for (int shelf = 0; shelf < nShelves; shelf++)
+		{
+			for (int cell = 0; cell < nCells; cell++)
+			{
+				for (int i = 0; i < warehouse[section].sections[shelf].shelves[cell].products.getSize(); i++)
+				{
+					if (warehouse[section].sections[shelf].shelves[cell].products[i].isExpired(current))
+					{
+						result += 1;
+					}
+				}
+
+			}
+		}
+	}
+	return result;
 }
 
 Vector<Section>& StorageHouse::getWarehouse() 
@@ -115,7 +163,7 @@ void StorageHouse::loadWarehouse(Vector<Product>& allProducts)
 					
 					for (int i = productsNumber + 1; i < allProducts.getSize() ; i++) //proverqvame za ednoimenni produkti koito mojem da slojim v sushtata kletka
 					{
-						if (allProducts[productsNumber].getName() == allProducts[i].getName()) // string cpp operator== const string const string
+						if (allProducts[productsNumber].getName() == allProducts[i].getName()) 
 						{
 							if (warehouse[section].sections[shelf].shelves[cell].products.getSize() != warehouse[section].sections[shelf].shelves[cell].capacity) // kletkata ima kapacitet za 2 partidi ot vseki produkt.
 							{
@@ -134,7 +182,7 @@ void StorageHouse::loadWarehouse(Vector<Product>& allProducts)
 
 void StorageHouse::addProduct(Product& product)
 {
-	if (!WHisFull())
+	if (!WHisFull() && getTotalWHQuantity() < this->totalCapacity)
 	{
 		for (int section = 0; section < nSectors; section++)
 		{
@@ -312,12 +360,8 @@ void StorageHouse::print()
 	}
 }
 
-void StorageHouse::clean(Vector<Product>& allProducts)
-{
-	std::cout << "Input current date:";
-	Date current;
-	std::cin >> current;
-	
+void StorageHouse::clean(Vector<Product>& allProducts, const Date& current)
+{	
 	std::cout << "List of removed Products and their location in the WH:" << std::endl;
 	for (int section = 0; section < nSectors; section++)
 	{
@@ -343,12 +387,10 @@ void StorageHouse::clean(Vector<Product>& allProducts)
 	}
 }
 
-
 Cell::Cell()
 {
 	capacity = 2; // each cell can contain 2 products of same nametype. (maksimum dve partidi)
 }
-
 Shelf::Shelf()
 {
 	Cell cell;

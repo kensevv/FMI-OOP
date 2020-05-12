@@ -5,41 +5,52 @@
 #include "Json.h"
 #include <fstream>
 
-void menu(std::ifstream & MyFile, String & jsontxt, String& filepath);
-void openFile(std::ifstream& MyFile, String & jsontxt, String& filepath);
-void closeFile(String & jsontxt, String & filepath);
-void saveFile(String& jsontxt);
-void saveAsFile(String& jsontxt);
+void menu();
+void openFile();
+void closeFile();
+void saveFile();
+void saveAsFile();
 void help();
 void exit();
 
-void useroptions(Json & json, std::ifstream& MyFile, String& jsontxt, String& filepath);
+void useroptions();
+void print();
 
-bool Validate(String & jsontxt);
+bool Validate();
 String removeWhiteSymbols(String& str);
 
 bool Exit = false;
 
+String filepath;
+String jsontxt;
+Json json;
 int main()
 {
     std::cout << "JSON parser 1.0" << std::endl; 
-    std::ifstream MyFile;
-    String filepath;
-    String jsontxt;
+    menu();
     do
     {
-        menu(MyFile, jsontxt, filepath);
-        if (Validate(jsontxt)) 
+        char input;
+        std::cout << "Enter (1) to open the Menu, Enter (2) for User Menu." << std::endl
+            << ">";
+        std::cin >> input;
+        std::cin.get();
+        if (input == '1')
         {
-            Json json(jsontxt);
-            //json.parse();
-            useroptions(json, MyFile, jsontxt, filepath);
+            menu();
         }
-
+        else if (input == '2')
+        {
+            if(filepath[0] == 0) std::cout << "No information loaded. Open a file first." << std::endl;
+            else useroptions();
+        }
+        else {
+            std::cout << "Wrong input, try again!" << std::endl;
+        }
     } while (!Exit);
 }
 
-void menu(std::ifstream& MyFile, String & jsontxt, String& filepath)
+void menu()
 {
     std::cout << std::endl << "Menu: Open, Close, Save, Save As, Help and Exit" << std::endl
         << ">";
@@ -51,22 +62,22 @@ void menu(std::ifstream& MyFile, String & jsontxt, String& filepath)
 
         if (userEntry == "open")
         {
-            openFile(MyFile, jsontxt, filepath);
+            openFile();
             break;
         }
         else if (userEntry == "close")
         {
-            closeFile(jsontxt, filepath);
+            closeFile();
             break;
         }
         else if (userEntry == "save")
         {
-            saveFile(jsontxt);
+            saveFile();
             break;
         }
         else if (userEntry == "save as")
         {
-            saveAsFile(jsontxt);
+            saveAsFile();
             break;
         }
         else if (userEntry == "help")
@@ -87,17 +98,18 @@ void menu(std::ifstream& MyFile, String & jsontxt, String& filepath)
     } while (true);
 }
 
-void openFile(std::ifstream& MyFile, String & jsontxt, String & filepath)
+void openFile()
 {
+   
     if (jsontxt[0] != 0)
     {
         std::cout << "Close first! There is already a json loaded into the memory" << std::endl; 
-        menu(MyFile, jsontxt, filepath);
     }
     else
     {
         do
         {
+            std::ifstream MyFile;
             std::cout << "Enter file name/path" << std::endl
                 << ">";
             char file[50];
@@ -113,11 +125,19 @@ void openFile(std::ifstream& MyFile, String & jsontxt, String & filepath)
                     MyFile.get();
                     jsontxt = jsontxt + str;
                 }
-                std::cin.get();
-                std::cout << "Successfully opened " << filepath << std::endl
-                    << "The information from the file has been loaded and the file has been closed." << std::endl;
-                filepath = file;
-                break;
+                std::cout << jsontxt; //
+                
+                MyFile.close();
+                std::cout << "\nSuccessfully opened " << filepath << std::endl;
+
+                if (Validate())
+                {
+                    json.loadNparse(jsontxt);
+                    filepath = file;
+                    std::cout << "The file is valid and the information has been loaded." << std::endl;
+                    break;
+                }
+                else std::cout << "Invalid Json file." << std::endl;
             }
             else
             {
@@ -127,7 +147,7 @@ void openFile(std::ifstream& MyFile, String & jsontxt, String & filepath)
     }
 }
 
-void closeFile(String & jsontxt, String & filepath)
+void closeFile()
 {
     if (jsontxt[0] == 0)
     {
@@ -135,12 +155,14 @@ void closeFile(String & jsontxt, String & filepath)
     }
     else
     {
-        jsontxt.reset();
         std::cout << "Successfully closed "<< filepath << " : memory resetted" << std::endl;
+        jsontxt.reset();
+        json.reset();
+        filepath.reset();
     }
 }
 
-void saveFile(String & jsontxt)
+void saveFile()
 {
     if (jsontxt[0] == 0)
     {
@@ -148,11 +170,26 @@ void saveFile(String & jsontxt)
     }
     else
     {
-
+        std::ofstream MyFile;
+        char file[50];
+        for (int i = 0; i < filepath.lenght() + 1; i++)
+        {
+            file[i] = filepath[i];
+        }
+        MyFile.open(file);
+        if (MyFile.is_open())
+        {
+            MyFile << json.getJsontxt() << std::endl;
+            std::cout << "Changes have been successfully saved to " << file << std::endl;
+            json.reset();
+            filepath.reset();
+            jsontxt.reset();
+        }
+        MyFile.close();
     }
 }
 
-void saveAsFile(String & jsontxt)
+void saveAsFile()
 {
     if (jsontxt[0] == 0)
     {
@@ -160,7 +197,25 @@ void saveAsFile(String & jsontxt)
     }
     else
     {
-
+        char file[50];
+        std::cout << "Input new file name." << std::endl
+            << ">";
+        std::cin >> file;
+        std::ofstream MyFile;
+        MyFile.open(file);
+        if (MyFile.is_open())
+        {
+            MyFile << json.getJsontxt() << std::endl;
+            std::cout << "Changes have been successfully Saved AS to " << file << std::endl;
+            json.reset();
+            filepath.reset();
+            jsontxt.reset();
+        }
+        else
+        {
+            std::cout << "Error, changes could not been saved." << std::endl;
+        }
+        MyFile.close();
     }
 }
 
@@ -173,25 +228,19 @@ void exit()
 {
     Exit = true;
     std::cout << "Exiting the program..." << std::endl;
-
 }
 
-void useroptions(Json& json, std::ifstream& MyFile, String& jsontxt, String& filepath)
+void useroptions()
 {
-    std::cout << "Options: (print), (search <key>), (set <path> <string>)" << std::endl
-        << "(create <path> <string>), (delete <path>), (move <from> <to>)" << std::endl
-        << "(save [<path>]), (saveas <file>[<path>])" << std::endl
-        << "To open the user menu type menu." << std::endl;
+    std::cout << "Options: Print, Search, Set" << std::endl
+        << "Create, Delete, Move" << std::endl
+        << "Save [path], SaveAs [<file><path>]\n>";
     String input;
     std::cin >> input;
     toLower(input);
-    if (input == "menu")
+    if (input == "print")
     {
-        menu(MyFile, jsontxt, filepath);
-    }
-    else if (input == "print")
-    {
-
+        print();
     }
     else
     {
@@ -199,20 +248,15 @@ void useroptions(Json& json, std::ifstream& MyFile, String& jsontxt, String& fil
     }
 }
 
-bool Validate(String & jsontxt)
+void print()
+{
+}
+
+bool Validate()
 {
     String text = removeWhiteSymbols(jsontxt);
-
-    int openingCurves = 0;
-    int closingCurves = 0;
-    int openingBrackets = 0;
-    int closingBrackets = 0;
-    int comas = 0;
-    int quotes = 0;
-    int doubleDots = 0;
-
     // to do 
-    return true;
+    return true; //zasega priemam che jsona e validen 
 }
 
 String removeWhiteSymbols(String& str)

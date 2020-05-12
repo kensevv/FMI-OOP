@@ -35,12 +35,11 @@ int main()
 	std::cout << "Warehouse management 1.0" << std::endl;
 	std::cout << "Input current Date!" << std::endl;
 	std::cin >> currentDate;
-	//
-	std::cout << currentDate;
 	Menu();
 	do
 	{
-		getWHinfo();
+		if(filename[0] != 0) getWHinfo();
+
 		char input;
 		std::cout << "Enter (1) to open the Menu, Enter (2) for Product management." << std::endl
 			<< ">";

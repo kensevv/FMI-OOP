@@ -408,7 +408,7 @@ void Add(Product & product)
 		std::ofstream writeLog(logsFile, std::ios::app);
 		if (writeLog.is_open())
 		{
-			writeLog << currentDate << " Added " << product.getName() << " - " << product.getAvailableQuantity() << std::endl;
+			writeLog << "[" << filename << "] " << currentDate << " Added " << product.getName() << " - " << product.getAvailableQuantity() << std::endl;
 		}
 		writeLog.close();
 	}
@@ -422,7 +422,7 @@ void Remove(const String& rName, int rQuantity)
 	std::ofstream writeLog(logsFile, std::ios::app);
 	if (writeLog.is_open())
 	{
-		writeLog << currentDate << " Removed " << rName << " - " << rQuantity << std::endl;
+		writeLog << "["<< filename <<"] " << currentDate << " Removed " << rName << " - " << rQuantity << std::endl;
 	}
 	writeLog.close();
 }
@@ -436,7 +436,7 @@ void Clean()
 	std::ofstream writeLog(logsFile, std::ios::app);
 	if (writeLog.is_open())
 	{
-		writeLog << currentDate << " Cleaned" << std::endl;
+		writeLog << "[" << filename << "] "<< currentDate << " Cleaned" << std::endl;
 	}
 	writeLog.close();
 }

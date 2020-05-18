@@ -30,6 +30,10 @@ StorageHouse warehouse;
 String filename;
 Date currentDate;
 
+Vector<String> logs;
+char logsFile[9] = "logs.txt";
+void readLogs();
+
 int main()
 {
 	std::cout << "Warehouse management 1.0" << std::endl;
@@ -58,6 +62,7 @@ int main()
 			std::cout << "Wrong input, try again!" << std::endl;
 		}
 	} while (!Exit);
+	
 }
 void clearScreen()
 {
@@ -150,6 +155,8 @@ void Open()
 				filename = file;
 				std::cout << "New " << file << " has been created. " << file << " has been opened." << std::endl;
 			}
+
+			readLogs();
 	}
 }
 
@@ -165,6 +172,7 @@ void Close()
 		filename.reset();
 		allProducts.empty();
 		warehouse.resetWH();
+		logs.empty();
 	}
 }
 
@@ -186,6 +194,7 @@ void Save()
 			filename.reset();
 			allProducts.empty();
 			warehouse.resetWH();
+			logs.empty();
 		}
 		else
 		{
@@ -196,7 +205,6 @@ void Save()
 	{
 		std::cout << "There is no file opened / no products loaded into memory" << std::endl;
 	}
-
 }
 
 void SaveAs()
@@ -216,6 +224,7 @@ void SaveAs()
 			filename.reset();
 			allProducts.empty();
 			warehouse.resetWH();
+			logs.empty();
 		}
 		else
 		{
@@ -331,7 +340,7 @@ void fileRead(std::ifstream& input)
 
 void ProdManagement()
 {
-	std::cout << "Product Management: Print, Add, Remove, Clean \n" << std::endl
+	std::cout << "Product Management: Print, Add, Remove, Clean, Logs\n" << std::endl
 		<< ">";
 	do
 	{
@@ -367,6 +376,14 @@ void ProdManagement()
 			Clean();
 			break;
 		}
+		else if (userInput == "logs") {
+			clearScreen();
+			for (int i = 0; i < logs.getSize(); i++)
+			{
+				std::cout << logs[i] << std::endl;
+			}
+			break;
+		}
 		else {
 			std::cout << "Wrong input, try again." << std::endl
 				<< ">";
@@ -386,18 +403,42 @@ void Add(Product & product)
 	if (product.getAddedToWh() == 1) {
 		std::cout << "Product has been successfully added to Warehouse." << std::endl;
 		allProducts.push_back(product);
+
+		//logs
+		std::ofstream writeLog(logsFile, std::ios::app);
+		if (writeLog.is_open())
+		{
+			writeLog << currentDate << " Added " << product.getName() << " - " << product.getAvailableQuantity() << std::endl;
+		}
+		writeLog.close();
 	}
 }
 
 void Remove(const String& rName, int rQuantity)
 {
 	warehouse.removeProduct(rName, rQuantity, allProducts);
+
+	//logs
+	std::ofstream writeLog(logsFile, std::ios::app);
+	if (writeLog.is_open())
+	{
+		writeLog << currentDate << " Removed " << rName << " - " << rQuantity << std::endl;
+	}
+	writeLog.close();
 }
 
 void Clean()
 {
 	warehouse.clean(allProducts, currentDate);
 	std::cout << "Your Warehouse has been cleaned from all expired products." << std::endl;
+
+	//logs
+	std::ofstream writeLog(logsFile, std::ios::app);
+	if (writeLog.is_open())
+	{
+		writeLog << currentDate << " Cleaned" << std::endl;
+	}
+	writeLog.close();
 }
 
 void getWHinfo()
@@ -410,4 +451,22 @@ void getWHinfo()
 			<< "It is recommended you 'clean' your WH from all expired products." << std::endl;
 	}
 	else std::cout << "There are no expired products in WH." << std::endl;
+}
+
+void readLogs()
+{
+	std::ifstream readLogs(logsFile);
+	if (readLogs.is_open())
+	{
+		while(!readLogs.eof())
+		{
+			char readInfo[250];
+			readLogs.getline(readInfo, 250); 
+			String log;
+			log = readInfo;
+			logs.push_back(log);
+		}
+		logs.removeAtIndex(logs.getSize()-1);
+	}
+	readLogs.close();
 }

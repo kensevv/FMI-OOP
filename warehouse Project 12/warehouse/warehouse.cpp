@@ -4,6 +4,8 @@
 #include <fstream>
 #include <stdlib.h>
 
+#include "enumTypeProduct.h"
+
 void clearScreen();
 
 void Menu();

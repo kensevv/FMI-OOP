@@ -9,6 +9,27 @@ pri dobavqne na nov produkt v sklada se gleda dali ima veche sushtestvuvasht tak
 v protiven sluchay sklada ne priema 3ta partida ot produkta predi da prodade starite.
 ako nqma produkt s takova ime produkta se dobavq v prazna kletka.
 */
+Cell::Cell()
+{
+	capacity = 2; // each cell can contain 2 products of same nametype. (maksimum dve partidi)
+}
+Shelf::Shelf()
+{
+	Cell cell;
+	for (int i = 0; i < 10; i++) //nCells
+	{
+		shelves.push_back(cell);
+	}
+}
+Section::Section()
+{
+	Shelf shelf;
+	for (int i = 0; i < 4; i++) //nShelves
+	{
+		sections.push_back(shelf);
+	}
+}
+
 StorageHouse::StorageHouse()
 {
 	Section section;
@@ -387,23 +408,3 @@ void StorageHouse::clean(Vector<Product>& allProducts, const Date& current)
 	}
 }
 
-Cell::Cell()
-{
-	capacity = 2; // each cell can contain 2 products of same nametype. (maksimum dve partidi)
-}
-Shelf::Shelf()
-{
-	Cell cell;
-	for (int i = 0; i < 10; i++) //nCells
-	{
-		shelves.push_back(cell);
-	}
-}
-Section::Section()
-{
-	Shelf shelf;
-	for (int i = 0; i < 4; i++) //nShelves
-	{
-		sections.push_back(shelf);
-	}
-}

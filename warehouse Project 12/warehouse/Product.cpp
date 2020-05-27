@@ -70,120 +70,12 @@ void Product::setName(const String& newName)
 
 void Product::setType(productType newType)
 {
-	switch (newType)
-	{
-	case 0:
-	{
-		this->Type = defaultType;
-		break;
-	}
-	case 1:
-	{
-		this->Type = food;
-		break;
-	}
-
-	case 2:
-	{
-		this->Type = drinks;
-		break;
-	}
-
-	case 3:
-	{
-
-		this->Type = alchohol;
-		break;
-	}
-	case 4:
-	{
-		this->Type = parfumery;
-		break;
-	}
-
-	case 5:
-	{
-
-		this->Type = householdGoods;
-		break;
-	}
-	case 6:
-	{
-
-		this->Type = laundryGoods;
-		break;
-	}
-	case 7:
-	{
-
-		this->Type = other;
-		break;
-	}
-	default:
-	{
-		std::cout << "Wrong!";
-		break;
-	};
-	}
+	this->Type = newType;
 }
 
 void Product::setType(int newType)
 {
-	switch (newType)
-	{
-	case 0:
-	{
-		this->Type = defaultType;
-		break;
-	}
-	case 1:
-	{
-		this->Type = food;
-		break;
-	}
-
-	case 2:
-	{
-		this->Type = drinks;
-		break;
-	}
-
-	case 3:
-	{
-
-		this->Type = alchohol;
-		break;
-	}
-	case 4:
-	{
-		this->Type = parfumery;
-		break;
-	}
-
-	case 5:
-	{
-
-		this->Type = householdGoods;
-		break;
-	}
-	case 6:
-	{
-
-		this->Type = laundryGoods;
-		break;
-	}
-	case 7:
-	{
-
-		this->Type = other;
-		break;
-	}
-	default:
-	{
-		//std::cout << "Wrong!";
-		break;
-	};
-	}
+	this->Type = (productType)newType;
 }
 
 void Product::setExpiryDate(int newYear, int newMonth, int newDay)
@@ -299,56 +191,33 @@ std::ostream& operator<<(std::ostream& out, const Product& current)
 	switch (current.Type)
 	{
 	case 0:
-	{
 		out << "(Default) ";
 		break;
-	}
 	case 1:
-	{
 		out << "(Food) ";
 		break;
-	}
-
 	case 2:
-	{
 		out << "(Drinks) ";
 		break;
-	}
-
 	case 3:
-	{
 		out << "(Alchohol) ";
 		break;
-	}
 	case 4:
-	{
 		out << "(Parfumery) ";
 		break;
-	}
-
 	case 5:
-	{
-
 		out << "(Household Goods) ";
 		break;
-	}
 	case 6:
-	{
-
 		out << "(Laundry Goods) ";
 		break;
-	}
 	case 7:
-	{
-
 		out << "(Other) ";
 		break;
-	}
 	default:
-	{
 		break;
-	};
 	}
+
 	if (current.unit == 0) out << "(KGs)";
 	else if (current.unit == 1) out << "(Liters)";
 	out << ": " << current.name << " - " << current.manufacturer << std::endl
@@ -368,62 +237,8 @@ std::istream& operator>>(std::istream& in, Product& current) {
 	std::cout << "Enter Product Type (0-defaultType,1-food,2-drinks,3-alchohol,4-parfumery,5-householdGoods,6-laundryGoods,7-other)";
 	int intType;
 	in >> intType;
-	switch (intType)
-	{
-	case 0:
-	{
-		current.Type = defaultType;
-		break;
-	}
-	case 1:
-	{
-		current.Type = food;
-		break;
-	}
-
-	case 2:
-	{
-		current.Type = drinks;
-		break;
-	}
-
-	case 3:
-	{
-
-		current.Type = alchohol;
-		break;
-	}
-	case 4:
-	{
-		current.Type = parfumery;
-		break;
-	}
-
-	case 5:
-	{
-
-		current.Type = householdGoods;
-		break;
-	}
-	case 6:
-	{
-
-		current.Type = laundryGoods;
-		break;
-	}
-	case 7:
-	{
-
-		current.Type = other;
-		break;
-	}
-	default:
-	{
-		std::cout << "Wrong!";
-		break;
-	};
-	}
-
+	current.setType(intType);
+	
 	in.get();
 	std::cout << "Enter expiryDate below" << std::endl;
 	in >> current.expiryDate;

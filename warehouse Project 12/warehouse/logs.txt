@@ -1,3 +1,6 @@
 [products.txt] 2020-5-18 Cleaned
 [products.txt] 2020-5-18 Added Sprite - 50
 [products.txt] 2020-5-18 Removed Sprite - 50
+[products.txt] 2020-5-22 Added Banana - 30
+[products.txt] 2020-5-22 Added The One EDP - 5
+[products.txt] 2020-5-22 Added Vodka - 10

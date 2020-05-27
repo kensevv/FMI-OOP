@@ -90,6 +90,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -149,11 +150,19 @@
   <ItemGroup>
     <ClCompile Include="JSON parser project 16.cpp" />
     <ClCompile Include="Json.cpp" />
+    <ClCompile Include="JsonArray.cpp" />
+    <ClCompile Include="JsonBool.cpp" />
+    <ClCompile Include="JsonDouble.cpp" />
+    <ClCompile Include="JsonInt.cpp" />
     <ClCompile Include="String.cpp" />
     <ClCompile Include="Vector.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Json.h" />
+    <ClInclude Include="JsonArray.h" />
+    <ClInclude Include="JsonBool.h" />
+    <ClInclude Include="JsonDouble.h" />
+    <ClInclude Include="JsonInt.h" />
     <ClInclude Include="String.h" />
     <ClInclude Include="Vector.h" />
   </ItemGroup>

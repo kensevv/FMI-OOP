@@ -1,9 +1,12 @@
 // jsontxt parser project 16.cpp : Kenan Yusein 71947
+#include <stdlib.h>
 #include <iostream>
 #include "String.h"
 #include "Vector.cpp"
 #include "Json.h"
 #include <fstream>
+
+void clearScreen();
 
 void menu();
 void openFile();
@@ -48,6 +51,11 @@ int main()
             std::cout << "Wrong input, try again!" << std::endl;
         }
     } while (!Exit);
+}
+
+void clearScreen()
+{
+    system("CLS");
 }
 
 void menu()
@@ -100,7 +108,7 @@ void menu()
 
 void openFile()
 {
-   
+    clearScreen();
     if (jsontxt[0] != 0)
     {
         std::cout << "Close first! There is already a json loaded into the memory" << std::endl; 
@@ -125,14 +133,14 @@ void openFile()
                     MyFile.get();
                     jsontxt = jsontxt + str;
                 }
-                std::cout << jsontxt; //
+                std::cout << jsontxt; 
                 
                 MyFile.close();
                 std::cout << "\nSuccessfully opened " << filepath << std::endl;
 
                 if (Validate())
                 {
-                    json.loadNparse(jsontxt);
+                    json.loadNparse(removeWhiteSymbols(jsontxt));
                     filepath = file;
                     std::cout << "The file is valid and the information has been loaded." << std::endl;
                     break;
@@ -149,6 +157,7 @@ void openFile()
 
 void closeFile()
 {
+    clearScreen();
     if (jsontxt[0] == 0)
     {
         std::cout << "Nothing to close. (No file opened/parser memory empty" << std::endl;
@@ -164,6 +173,7 @@ void closeFile()
 
 void saveFile()
 {
+    clearScreen();
     if (jsontxt[0] == 0)
     {
         std::cout << "Nothing to save. (No file opened/parser memory empty" << std::endl;
@@ -191,6 +201,7 @@ void saveFile()
 
 void saveAsFile()
 {
+    clearScreen();
     if (jsontxt[0] == 0)
     {
         std::cout << "Nothing to save. (No file opened/parser memory empty" << std::endl;
@@ -221,20 +232,21 @@ void saveAsFile()
 
 void help()
 {
-
+    clearScreen();
 }
 
 void exit()
 {
+    clearScreen();
     Exit = true;
     std::cout << "Exiting the program..." << std::endl;
 }
 
 void useroptions()
 {
-    std::cout << "Options: Print, Search, Set" << std::endl
+    std::cout << "Options: Print, (Search, Set" << std::endl
         << "Create, Delete, Move" << std::endl
-        << "Save [path], SaveAs [<file><path>]\n>";
+        << "Save [path], SaveAs [<file><path>] )\n>";
     String input;
     std::cin >> input;
     toLower(input);
@@ -250,6 +262,8 @@ void useroptions()
 
 void print()
 {
+    clearScreen();
+    json.print();
 }
 
 bool Validate()

@@ -11,6 +11,11 @@ JsonDouble::JsonDouble(const String& _jsontxt, const std::map<std::string, Json*
 	this->value = _value;
 }
 
+JsonDouble::JsonDouble(double _value)
+{
+	this->value = _value;
+}
+
 JsonDouble::JsonDouble(const JsonDouble& other)
 {
 	copy(other);

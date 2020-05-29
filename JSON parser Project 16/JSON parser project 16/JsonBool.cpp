@@ -11,6 +11,11 @@ JsonBool::JsonBool(const String& _jsontxt, const std::map<std::string, Json*> _e
 	this->value = _value;
 }
 
+JsonBool::JsonBool(bool _value)
+{
+	this->value = _value;
+}
+
 JsonBool::JsonBool(const JsonBool& other)
 {
 	copy(other);

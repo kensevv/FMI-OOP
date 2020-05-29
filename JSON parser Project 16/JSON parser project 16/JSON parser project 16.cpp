@@ -20,6 +20,9 @@ void useroptions();
 void print();
 
 bool Validate();
+bool brackets();
+bool otherValidations();
+
 String removeWhiteSymbols(String& str);
 
 bool Exit = false;
@@ -128,12 +131,10 @@ void openFile()
             {
                 while (!MyFile.eof())
                 {
-                    String str;
-                    MyFile >> str;
-                    MyFile.get();
+                    char str[1000];
+                    MyFile.getline(str, 1000);
                     jsontxt = jsontxt + str;
                 }
-                std::cout << jsontxt; 
                 
                 MyFile.close();
                 std::cout << "\nSuccessfully opened " << filepath << std::endl;
@@ -268,10 +269,51 @@ void print()
 
 bool Validate()
 {
-    String text = removeWhiteSymbols(jsontxt);
-    // to do 
-    return true; //zasega priemam che jsona e validen 
+    return brackets() && otherValidations();
 }
+
+bool brackets()
+{
+    String str = removeWhiteSymbols(jsontxt);
+    //checking { } brackets.
+    int counter = 0;
+    for (int i = 0; i < str.lenght(); i++)
+    {
+        if (str[i] == '{') counter++;
+        else if (str[i] == '}') counter--;
+
+        if (counter < 0) return false;
+    }
+    if (counter != 0) return false;
+
+    // checking [ ] brackets;
+    counter = 0;
+    for (int i = 0; i < str.lenght(); i++)
+    {
+        if ('[' == str[i])counter++;
+        else if (']' == str[i])  counter--;
+
+        if (counter < 0) return false;
+    }
+    if (counter != 0) return false;
+
+    return true;
+}
+
+bool otherValidations()
+{
+    String str = removeWhiteSymbols(jsontxt);
+    int comas = 0, quotes = 0, doubledots = 0;
+
+    //to:do
+    for (int i = 0; i < str.lenght(); i++)
+    {
+
+    }
+    
+    return true;
+}
+
 
 String removeWhiteSymbols(String& str)
 {

@@ -11,6 +11,11 @@ JsonInt::JsonInt(const String& _jsontxt, const std::map<std::string, Json*> _ele
 	this->value = _value;
 }
 
+JsonInt::JsonInt(int _value) 
+{
+	this->value = _value;
+}
+
 JsonInt::JsonInt(const JsonInt& other)
 {
 	copy(other);

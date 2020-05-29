@@ -10,6 +10,7 @@ private:
 public:
 	JsonDouble();
 	JsonDouble(const String& _jsontxt, const std::map<std::string, Json*> _elements, double _value);
+	JsonDouble(double _value);
 	JsonDouble(const JsonDouble& other);
 	JsonDouble& operator=(const JsonDouble& other);
 	double getValue()const;

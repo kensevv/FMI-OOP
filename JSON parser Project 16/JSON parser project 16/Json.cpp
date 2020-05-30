@@ -75,7 +75,7 @@ void Json::loadNparse(const std::string& txt)
 	this->jsontxt = txt;
 	for (size_t i = 0; i < jsontxt.length(); i++) //bug fix for nesting objects into objects with arrays in the nested object 
 	{
-		if (jsontxt[i] == ']') jsontxt.insert(i + 1, ",,");
+		if (jsontxt[i] == ']') jsontxt.insert(i + 1, ",");
 	}
 	parse(this->jsontxt, this->elements);
 }
@@ -88,7 +88,6 @@ void Json::parse(std::string& thisjsontxt, std::map<std::string, Json*>& thisele
 	while (!sstream.eof())
 	{
 		std::string JsonKey;
-		//...
 		char symbol;
 		sstream >> symbol;
 		if (symbol == '}' || symbol == ']')
@@ -114,23 +113,23 @@ void Json::parse(std::string& thisjsontxt, std::map<std::string, Json*>& thisele
 			
 			
 			sstream.seekg(position);
-			sstream.getline(value, 1000, '}');
+			sstream.getline(value, 1000, '}'); // getting the the whole remaining string in case its Value is another object.
 			std::string findValtype = value;
 			
 			
-			if (findValtype[0] != '{') // if the key is not object, i read untill , and if its an object i save the whole object(key) in a string
+			if (findValtype[0] != '{') // if the Value is not object, i read untill ',' for a normal value 
 			{
 				sstream.seekg(position); //returning to saved stream position
-				sstream.getline(value, 50, ',');
+				sstream.getline(value, 50, ','); 
 				findValtype = value;
 			}
-			if (findValtype[0] == '[')
+			if (findValtype[0] == '[') // if the value is an array
 			{
 				sstream.seekg(position);
-				sstream.getline(value, 1000, ']');
+				sstream.getline(value, 1000, ']'); // reading it again so i can have proper sstream position ( seekg bugged my program here)
 				findValtype = value;
 			}
-			std::istringstream findType(findValtype);
+			std::istringstream findType(findValtype); // findType stream will be used to find the type of the value and parse it
 
 			//finding key type and creating Json* accordingly
 			if (findValtype[0] == '{') // new object
@@ -178,18 +177,18 @@ void Json::parse(std::string& thisjsontxt, std::map<std::string, Json*>& thisele
 					Json* thisJson = createJson(intValue);
 					thiselements.insert(std::pair<std::string, Json*>(JsonKey, thisJson));
 				}
-			} //-----------------------------------------
+			} 
 			else if (findValtype[0] == '[') // array
 			{
 				
 				findType.get(); // removing the [
 				
-
+				// first ill determine the type of the array and only one of these vectors will be filled during the while()
 				std::vector<int> intarr;
 				std::vector<double> doublearr;
 				std::vector<std::string> stringarr;
 				
-				while (!findType.eof())
+				while (!findType.eof()) // find the type and parsing the elements of the array
 				{
 					
 					if (findValtype[1] == '"')
@@ -203,7 +202,7 @@ void Json::parse(std::string& thisjsontxt, std::map<std::string, Json*>& thisele
 						stringarr.push_back(currentKey);
 					}
 					
-					else if (findValtype[1] >= '0' && findValtype[1] <= '9')
+					else if (findValtype[1] >= '0' && findValtype[1] <= '9') 
 					{
 						bool isDoubleArray = false;
 						for (int i = 0; i < findValtype.length(); i++) { if (findValtype[i] == '.')isDoubleArray = true; }
@@ -234,19 +233,20 @@ void Json::parse(std::string& thisjsontxt, std::map<std::string, Json*>& thisele
 					}
 				}
 
+				// finding the not empty arraytype vector and inserting it to the map
 				if (!intarr.empty())
 				{
-					Json* newJson = new JsonIntArray(intarr);
+					Json* newJson = createJson(intarr);
 					thiselements.insert(std::pair<std::string, Json*>(JsonKey, newJson));
 				}
 				else if (!doublearr.empty())
 				{
-					Json* newJson = new JsonDoubleArray(doublearr);
+					Json* newJson = createJson(doublearr);
 					thiselements.insert(std::pair<std::string, Json*>(JsonKey, newJson));
 				}
 				else if (!stringarr.empty())
 				{
-					Json* newJson = new JsonStringArray(stringarr);
+					Json* newJson = createJson(stringarr);
 					thiselements.insert(std::pair<std::string, Json*>(JsonKey, newJson));
 				}
 			}
@@ -277,3 +277,21 @@ Json* Json::createJson(std::string value)
 	Json* newJson = new JsonString(value);
 	return newJson;
 }
+
+Json* Json::createJson(std::vector<int>& value)
+{
+	Json* newJson = new JsonIntArray(value);
+	return newJson;
+}
+
+Json* Json::createJson(std::vector<double>& value)
+{
+	Json* newJson = new JsonDoubleArray(value);
+	return newJson;
+}
+Json* Json::createJson(std::vector<std::string>& value)
+{
+	Json* newJson = new JsonStringArray(value);
+	return newJson;
+}
+

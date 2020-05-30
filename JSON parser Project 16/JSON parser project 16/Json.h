@@ -35,4 +35,7 @@ public:
 	Json* createJson(double value);
 	Json* createJson(bool value);
 	Json* createJson(std::string value);
+	Json* createJson(std::vector<int>& value);
+	Json* createJson(std::vector<double>& value);
+	Json* createJson(std::vector<std::string>& value);
 };

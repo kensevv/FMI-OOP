@@ -43,7 +43,7 @@ void JsonBool::setValue(bool value)
 
 void JsonBool::print()
 {
-	std::cout << this->value ? "True" : "False";
+	std::cout << std::boolalpha << value;
 }
 
 void JsonBool::copy(const JsonBool& other)

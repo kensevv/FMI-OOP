@@ -9,7 +9,11 @@
     "Dad Name": "Kemal",
     "Dad Age": 47,
     "Sister Name": "Sevdjan",
-    "Sister Age": 22
+    "Sister Age": 22,
+    "Granparent names": [ "GP_1_Name", "GP_2_Name", "GP_3_Name" ],
+    "GP Ages": [ 70, 72, 60 ]
   },
-  "Fav Hobbie": "C++ LOL"
+  "Fav Hobbies": [ "Coding", "Gaming", "Volleyball" ],
+  "Fav Numbers": [ 16, 13, 6 ],
+  "Fav double numbers": [6.6, 4.20, 3.4]
 }

@@ -4,6 +4,7 @@
 #include <any>
 #include <typeinfo>
 #include <sstream>      // std::istringstream
+#include <vector>
 
 class Json
 {

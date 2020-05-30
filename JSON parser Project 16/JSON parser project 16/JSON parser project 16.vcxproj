@@ -153,8 +153,11 @@
     <ClCompile Include="JsonArray.cpp" />
     <ClCompile Include="JsonBool.cpp" />
     <ClCompile Include="JsonDouble.cpp" />
+    <ClCompile Include="JsonDoubleArray.cpp" />
     <ClCompile Include="JsonInt.cpp" />
+    <ClCompile Include="JsonIntArray.cpp" />
     <ClCompile Include="JsonString.cpp" />
+    <ClCompile Include="JsonStringArray.cpp" />
     <ClCompile Include="String.cpp" />
     <ClCompile Include="Vector.cpp" />
   </ItemGroup>
@@ -163,8 +166,11 @@
     <ClInclude Include="JsonArray.h" />
     <ClInclude Include="JsonBool.h" />
     <ClInclude Include="JsonDouble.h" />
+    <ClInclude Include="JsonDoubleArray.h" />
     <ClInclude Include="JsonInt.h" />
+    <ClInclude Include="JsonIntArray.h" />
     <ClInclude Include="JsonString.h" />
+    <ClInclude Include="JsonStringArray.h" />
     <ClInclude Include="String.h" />
     <ClInclude Include="Vector.h" />
   </ItemGroup>

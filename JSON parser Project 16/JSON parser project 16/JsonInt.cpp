@@ -5,7 +5,7 @@ JsonInt::JsonInt()
 {
 }
 
-JsonInt::JsonInt(const String& _jsontxt, const std::map<std::string, Json*> _elements, int _value)
+JsonInt::JsonInt(const std::string& _jsontxt, const std::map<std::string, Json*> _elements, int _value)
 	: Json(_jsontxt, _elements)
 {
 	this->value = _value;

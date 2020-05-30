@@ -5,7 +5,7 @@ JsonDouble::JsonDouble()
 {
 }
 
-JsonDouble::JsonDouble(const String& _jsontxt, const std::map<std::string, Json*> _elements, double _value)
+JsonDouble::JsonDouble(const std::string& _jsontxt, const std::map<std::string, Json*> _elements, double _value)
 	: Json(_jsontxt, _elements)
 {
 	this->value = _value;

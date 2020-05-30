@@ -10,7 +10,7 @@ private:
 
 public:
 	JsonInt();
-	JsonInt(const String& _jsontxt, const std::map<std::string, Json*> _elements, int _value);
+	JsonInt(const std::string& _jsontxt, const std::map<std::string, Json*> _elements, int _value);
 	JsonInt(int _value);
 	JsonInt(const JsonInt& other);
 	JsonInt& operator=(const JsonInt& other);

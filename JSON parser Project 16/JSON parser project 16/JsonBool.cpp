@@ -5,7 +5,7 @@ JsonBool::JsonBool()
 {
 }
 
-JsonBool::JsonBool(const String& _jsontxt, const std::map<std::string, Json*> _elements, bool _value)
+JsonBool::JsonBool(const std::string& _jsontxt, const std::map<std::string, Json*> _elements, bool _value)
 	:Json(_jsontxt, _elements)
 {
 	this->value = _value;

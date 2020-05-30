@@ -9,7 +9,7 @@ private:
 
 public:
 	JsonBool();
-	JsonBool(const String& _jsontxt, const std::map<std::string, Json*> _elements, bool _value);
+	JsonBool(const std::string& _jsontxt, const std::map<std::string, Json*> _elements, bool _value);
 	JsonBool(bool _value);
 	JsonBool(const JsonBool& other);
 	JsonBool& operator=(const JsonBool& other);

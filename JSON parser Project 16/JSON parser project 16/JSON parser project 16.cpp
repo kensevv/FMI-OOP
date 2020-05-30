@@ -1,7 +1,6 @@
 // jsontxt parser project 16.cpp : Kenan Yusein 71947
 #include <stdlib.h>
 #include <iostream>
-#include "String.h"
 #include "Vector.cpp"
 #include "Json.h"
 #include <fstream>
@@ -23,13 +22,16 @@ bool Validate();
 bool brackets();
 bool otherValidations();
 
-String removeWhiteSymbols(String& str);
+std::string removeWhiteSymbols(std::string& str);
+std::string toLower(std::string& s);
 
 bool Exit = false;
 
-String filepath;
-String jsontxt;
+std::string filepath;
+std::string jsontxt;
 Json json;
+
+
 int main()
 {
     std::cout << "JSON parser 1.0" << std::endl; 
@@ -67,7 +69,7 @@ void menu()
         << ">";
     do
     {
-        String userEntry;
+        std::string userEntry;
         std::cin >> userEntry;
         toLower(userEntry);
 
@@ -166,9 +168,11 @@ void closeFile()
     else
     {
         std::cout << "Successfully closed "<< filepath << " : memory resetted" << std::endl;
-        jsontxt.reset();
+        jsontxt.clear();
+        //jsontxt.reset();
         json.reset();
-        filepath.reset();
+        filepath.clear();
+        //filepath.reset();
     }
 }
 
@@ -183,7 +187,7 @@ void saveFile()
     {
         std::ofstream MyFile;
         char file[50];
-        for (int i = 0; i < filepath.lenght() + 1; i++)
+        for (int i = 0; i < filepath.length() + 1; i++)
         {
             file[i] = filepath[i];
         }
@@ -193,8 +197,10 @@ void saveFile()
             MyFile << json.getJsontxt() << std::endl;
             std::cout << "Changes have been successfully saved to " << file << std::endl;
             json.reset();
-            filepath.reset();
-            jsontxt.reset();
+            filepath.clear();
+            jsontxt.clear();
+            //filepath.reset();
+            //jsontxt.reset();
         }
         MyFile.close();
     }
@@ -220,8 +226,10 @@ void saveAsFile()
             MyFile << json.getJsontxt() << std::endl;
             std::cout << "Changes have been successfully Saved AS to " << file << std::endl;
             json.reset();
-            filepath.reset();
-            jsontxt.reset();
+            filepath.clear();
+            jsontxt.clear();
+            //filepath.reset();
+            //jsontxt.reset();
         }
         else
         {
@@ -248,7 +256,7 @@ void useroptions()
     std::cout << "Options: Print, (Search, Set" << std::endl
         << "Create, Delete, Move" << std::endl
         << "Save [path], SaveAs [<file><path>] )\n>";
-    String input;
+    std::string input;
     std::cin >> input;
     toLower(input);
     if (input == "print")
@@ -264,6 +272,7 @@ void useroptions()
 void print()
 {
     clearScreen();
+    std::cout << "Parsed Json:" << std::endl;
     json.print();
 }
 
@@ -274,10 +283,10 @@ bool Validate()
 
 bool brackets()
 {
-    String str = removeWhiteSymbols(jsontxt);
+    std::string str = removeWhiteSymbols(jsontxt);
     //checking { } brackets.
     int counter = 0;
-    for (int i = 0; i < str.lenght(); i++)
+    for (int i = 0; i < str.length(); i++)
     {
         if (str[i] == '{') counter++;
         else if (str[i] == '}') counter--;
@@ -288,7 +297,7 @@ bool brackets()
 
     // checking [ ] brackets;
     counter = 0;
-    for (int i = 0; i < str.lenght(); i++)
+    for (int i = 0; i < str.length(); i++)
     {
         if ('[' == str[i])counter++;
         else if (']' == str[i])  counter--;
@@ -302,11 +311,11 @@ bool brackets()
 
 bool otherValidations()
 {
-    String str = removeWhiteSymbols(jsontxt);
+    std::string str = removeWhiteSymbols(jsontxt);
     int comas = 0, quotes = 0, doubledots = 0;
 
     //to:do
-    for (int i = 0; i < str.lenght(); i++)
+    for (int i = 0; i < str.length(); i++)
     {
 
     }
@@ -315,10 +324,10 @@ bool otherValidations()
 }
 
 
-String removeWhiteSymbols(String& str)
+std::string removeWhiteSymbols(std::string& str)
 {
-    String result;
-    for (int i = 0; i < str.lenght(); i++)
+    std::string result;
+    for (int i = 0; i < str.length(); i++)
     {
         if (str[i] != ' ')
         {
@@ -326,4 +335,13 @@ String removeWhiteSymbols(String& str)
         }
     }
     return result;
+}
+
+std::string toLower(std::string& s)
+{
+    for (int i = 0; i < s.length(); i++)
+    {
+        if (s[i] >= 'A' && s[i] <= 'Z') s[i] = s[i] + 32;
+    }
+    return s;
 }

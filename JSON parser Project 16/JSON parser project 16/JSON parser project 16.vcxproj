@@ -156,6 +156,7 @@
     <ClCompile Include="JsonDoubleArray.cpp" />
     <ClCompile Include="JsonInt.cpp" />
     <ClCompile Include="JsonIntArray.cpp" />
+    <ClCompile Include="JsonObjectArray.cpp" />
     <ClCompile Include="JsonString.cpp" />
     <ClCompile Include="JsonStringArray.cpp" />
     <ClCompile Include="String.cpp" />
@@ -169,6 +170,7 @@
     <ClInclude Include="JsonDoubleArray.h" />
     <ClInclude Include="JsonInt.h" />
     <ClInclude Include="JsonIntArray.h" />
+    <ClInclude Include="JsonObjectArray.h" />
     <ClInclude Include="JsonString.h" />
     <ClInclude Include="JsonStringArray.h" />
     <ClInclude Include="String.h" />

@@ -15,10 +15,10 @@
   },
   "Fav Hobbies": [ "Coding", "Gaming", "Volleyball" ],
   "Fav Numbers": [ 16, 13, 6 ],
-  "Fav double numbers": [ 6.6, 4.20, 3.4 ]
+  "Fav double numbers": [ 6.6, 4.20, 3.4 ],
   "UniversitySubjects": {
     "Maths": [ "DIS", "GEOMETRY", "ALGEBRA" ],
-    "Programming": [ "OOP", "FPR" ]
+    "Programming": [ "OOP", "FPR" ],
     "Marks": {
       "DIS1": 5,
       "UP": 6

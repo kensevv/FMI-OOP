@@ -190,7 +190,13 @@ void Json::parse(std::string& thisjsontxt, std::map<std::string, Json*>& thisele
 				
 				while (!findType.eof()) // find the type and parsing the elements of the array
 				{
-					
+					if (findValtype[1] == '{') {
+						std::cout <<std::endl<< "The program doesn't support array of objects yet. Soon!" << std::endl 
+							<< "Please close and open supported JSON file" << std::endl;
+						jsontxt.clear();
+						elements.clear();
+						return;
+					}
 					if (findValtype[1] == '"')
 					{
 						findType.get();

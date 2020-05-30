@@ -176,6 +176,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="example.json" />
+    <None Include="example1.json" />
+    <None Include="example2.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -91,5 +91,11 @@
     <None Include="example.json">
       <Filter>Source Files</Filter>
     </None>
+    <None Include="example1.json">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="example2.json">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

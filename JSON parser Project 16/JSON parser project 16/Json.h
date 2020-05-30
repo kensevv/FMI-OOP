@@ -28,7 +28,7 @@ public:
 
 	void loadNparse(const std::string & txt);
 
-	void parse();
+	void parse(std::string& jsontext, std::map<std::string, Json*>& elements);
 
 	Json* createJson(int value);
 	Json* createJson(double value);

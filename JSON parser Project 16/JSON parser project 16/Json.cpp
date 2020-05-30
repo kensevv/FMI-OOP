@@ -70,27 +70,25 @@ const std::map<std::string, Json*>& Json::getElements() const
 void Json::loadNparse(const std::string& txt)
 {
 	this->jsontxt = txt;
-	parse();
+	parse(this->jsontxt, this->elements);
 }
 
-void Json::parse()
+void Json::parse(std::string& thisjsontxt, std::map<std::string, Json*>& thiselements)
 {
-	//std::cout << jsontxt;
-	std::istringstream sstream(jsontxt);
-	
+	std::istringstream sstream(thisjsontxt);
+	sstream.get(); // getting the first { 
 	
 	while (!sstream.eof())
 	{
 		std::string JsonKey;
 		//...
-
 		char symbol;
 		sstream >> symbol;
-		if (symbol == '{') // new object type
+		if (symbol == '}')
 		{
-			//new json* as value, recursive pasring.
+			return;
 		}
-		else if (symbol == '"') // Key of the object
+		if (symbol == '"') // Key of the object
 		{
 			//getting the whole key as one string
 
@@ -98,15 +96,31 @@ void Json::parse()
 			sstream.getline(key, 20, '"');
 			JsonKey = key;
 
-			char value[50];
+			char value[1000];
 			sstream.get(); // getting the :
-			sstream.getline(value, 50, ',');
 
-			std::string findVtype = value;
-			std::istringstream findType(findVtype);
+			int position = sstream.tellg(); // saving the current position
+
+			sstream.getline(value, 1000, '}');
+			std::string findValtype = value; 
+
+			if (findValtype[0] != '{') // if the key is not object, i read untill , and if its an object i save the whole object(key) in a string
+			{
+				sstream.seekg(position); //returning to saved stream position
+				sstream.getline(value, 50, ',');
+				findValtype = value;
+			}
+
+			std::istringstream findType(findValtype);
 
 			//finding key type and creating Json* accordingly
-			if (findVtype[0] == '"') // string type
+			 if (findValtype[0] == '{') // new object
+			 {
+				Json* newestJson = new Json(findValtype);
+				parse(findValtype, newestJson->elements);
+				thiselements.insert(std::pair<std::string, Json*>(JsonKey, newestJson));
+			 }
+			else if (findValtype[0] == '"') // string type
 			{
 				char thisValue[50];
 				findType.get();
@@ -114,28 +128,28 @@ void Json::parse()
 				std::string stringValue = thisValue;
 
 				Json* thisJson = createJson(stringValue);
-				elements.insert(std::pair<std::string, Json*>(JsonKey, thisJson));
+				thiselements.insert(std::pair<std::string, Json*>(JsonKey, thisJson));
 			}
-			else if (findVtype[0] == 't' || findVtype[0] == 'f') //bool type
+			else if (findValtype[0] == 't' || findValtype[0] == 'f') //bool type
 			{
 				bool boolValue;
-				if (findVtype == "true") boolValue = true;
+				if (findValtype == "true") boolValue = true;
 				else boolValue = false;
 
 				Json* thisJson = createJson(boolValue);
-				elements.insert(std::pair<std::string, Json*>(JsonKey, thisJson));
+				thiselements.insert(std::pair<std::string, Json*>(JsonKey, thisJson));
 			}
-			else if (findVtype[0] >= '0' && findVtype[0] <= '9') // int / double
+			else if (findValtype[0] >= '0' && findValtype[0] <= '9') // int / double
 			{
 				bool isDouble = false;
-				for (int i = 0; i < findVtype.length(); i++) { if (findVtype[i] == '.')isDouble = true; }
+				for (int i = 0; i < findValtype.length(); i++) { if (findValtype[i] == '.')isDouble = true; }
 
 				if (isDouble)
 				{
 					double doubleValue;
 					findType >> doubleValue;
 					Json* thisJson = createJson(doubleValue);
-					elements.insert(std::pair<std::string, Json*>(JsonKey, thisJson));
+					thiselements.insert(std::pair<std::string, Json*>(JsonKey, thisJson));
 				}
 				else
 				{
@@ -143,7 +157,7 @@ void Json::parse()
 					findType >> intValue;
 					
 					Json* thisJson = createJson(intValue);
-					elements.insert(std::pair<std::string, Json*>(JsonKey, thisJson));
+					thiselements.insert(std::pair<std::string, Json*>(JsonKey, thisJson));
 				}
 			}
 		}

@@ -1,18 +1,22 @@
 {
-  "NAME": "KENAN",
-  "AGE": 20,
+  "Name": "KENAN",
+  "Age": 20,
   "PocketMoney": 10.50,
   "Gender": true,
-  "FamilyMembers": {
-    "Mom Name": "Barie",
-    "Mom Age": 40,
-    "Dad Name": "Kemal",
-    "Dad Age": 47,
-    "Sister Name": "Sevdjan",
-    "Sister Age": 22,
-    "Granparent names": [ "GP_1_Name", "GP_2_Name", "GP_3_Name" ],
-    "GP Ages": [ 70, 72, 60 ]
+  "Mom": {
+    "Name": "Barie",
+    "Age": 40
   },
+  "Dad": {
+    "Name": "Kemal",
+    "Age": 47
+  },
+  "Sister": {
+    "Name": "Sevdjan",
+    "Age": 22
+  },
+  "Granparent names": [ "GP_1_Name", "GP_2_Name", "GP_3_Name" ],
+  "GP Ages": [ 70, 72, 60 ],
   "Fav Hobbies": [ "Coding", "Gaming", "Volleyball" ],
   "Fav Numbers": [ 16, 13, 6 ],
   "Fav double numbers": [ 6.6, 4.20, 3.4 ],

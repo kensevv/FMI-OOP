@@ -52,6 +52,40 @@ void Json::print()
 	}
 }
 
+void Json::searchKey(std::string& sKey, bool & found) // this will search for matches with all keys, even nested ones in objects.
+{
+	std::map<std::string, Json*>::iterator itr;
+	for (itr = elements.begin(); itr != elements.end(); ++itr)
+	{
+		if (itr->first == sKey) {
+			std::cout << itr->first << "  -  "; itr->second->print(); std::cout << std::endl;
+			found = true;
+		}
+		else itr->second->searchKey(sKey, found);
+	}
+}
+
+void Json::deleteKey(std::string& dKey, bool& deleted)
+{
+	std::map<std::string, Json*>::iterator itr;
+	for (itr = elements.begin(); itr != elements.end() && deleted == false; ++itr)
+	{
+		if (itr->first == dKey) {
+			std::cout << itr->first << "  -  "; itr->second->print(); std::cout << "  -> DELETED from the container!" << std::endl;
+			elements.erase(itr);
+			deleted = true;
+			break;
+		}
+		else itr->second->deleteKey(dKey, deleted);
+	}
+}
+
+void Json::create(std::string& newElement)
+{
+	newElement.insert(0, "{");
+	std::cout << newElement;
+	parse(newElement, elements);
+}
 
 void Json::reset()
 {
@@ -65,7 +99,7 @@ const std::string& Json::getJsontxt() const
 	return this->jsontxt;
 }
 
-const std::map<std::string, Json*>& Json::getElements() const
+const std::map<std::string, Json*>& Json::getElements()const
 {
 	return this->elements;
 }

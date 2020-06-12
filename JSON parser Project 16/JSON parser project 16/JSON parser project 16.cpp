@@ -17,10 +17,13 @@ void exit();
 
 void useroptions();
 void print();
+void searchKey(std::string&);
+void deleteKey(std::string&);
+void create(std::string& newElement);
 
-bool Validate();
-bool brackets();
-bool otherValidations();
+bool Validate(std::string& jsontxt);
+bool brackets(std::string& jsontxt);
+bool otherValidations(std::string& jsontxt);
 
 std::string removeWhiteSymbols(std::string& str);
 std::string toLower(std::string& s);
@@ -141,7 +144,7 @@ void openFile()
                 MyFile.close();
                 std::cout << "\nSuccessfully opened " << filepath << std::endl;
 
-                if (Validate())
+                if (Validate(jsontxt))
                 {
                     json.loadNparse(removeWhiteSymbols(jsontxt));
                     filepath = file;
@@ -199,8 +202,6 @@ void saveFile()
             json.reset();
             filepath.clear();
             jsontxt.clear();
-            //filepath.reset();
-            //jsontxt.reset();
         }
         MyFile.close();
     }
@@ -228,8 +229,6 @@ void saveAsFile()
             json.reset();
             filepath.clear();
             jsontxt.clear();
-            //filepath.reset();
-            //jsontxt.reset();
         }
         else
         {
@@ -242,6 +241,7 @@ void saveAsFile()
 void help()
 {
     clearScreen();
+    // ...
 }
 
 void exit()
@@ -253,15 +253,38 @@ void exit()
 
 void useroptions()
 {
-    std::cout << "Options: Print, (Search, Set" << std::endl
-        << "Create, Delete, Move" << std::endl
-        << "Save [path], SaveAs [<file><path>] )\n>";
+    std::cout << "Options: Print, Search, Delete, Create" << std::endl;
+    std::cout << ">";
     std::string input;
-    std::cin >> input;
+    std::getline(std::cin, input);
     toLower(input);
     if (input == "print")
     {
         print();
+    }
+    else if (input == "search")
+    {
+        std::cout << "<key>: >";
+        std::string sKey;
+        std::getline(std::cin, sKey);
+
+        searchKey(sKey);
+    }
+    else if (input == "delete")
+    {
+        std::cout << "<key>: >";
+        std::string dKey;
+        std::getline(std::cin, dKey);
+
+        deleteKey(dKey);
+    }
+    else if (input == "create")
+    {
+        std::cout << "Enter valid Json format key - value. (\"KEY\": value)" << std::endl;
+        std::cout << ">";
+        std::string newElement;
+        std::getline(std::cin, newElement);
+        create(newElement);
     }
     else
     {
@@ -276,12 +299,43 @@ void print()
     json.print();
 }
 
-bool Validate()
+void searchKey(std::string& sKey)
 {
-    return brackets() && otherValidations();
+    clearScreen();
+
+    bool found = false;
+    json.searchKey(sKey, found);
+
+    if (!found) std::cout << "Key \"" << sKey << "\" was not found!" << std::endl;
 }
 
-bool brackets()
+void deleteKey(std::string& dKey)
+{
+    clearScreen();
+    bool deleted = false;
+
+    json.deleteKey(dKey, deleted);
+
+    if (!deleted) std::cout << "Key \"" << dKey << "\" was not found!" << std::endl;
+}
+
+void create(std::string& newElement)
+{
+    clearScreen();
+    std::cout << newElement << std::endl;
+    if (Validate(newElement))
+    {
+        json.create(newElement);
+    }
+    else std::cout << "Invalid json format input." << std::endl;
+}
+
+bool Validate(std::string& jsontxt)
+{
+    return brackets(jsontxt) && otherValidations(jsontxt);
+}
+
+bool brackets(std::string& jsontxt)
 {
     std::string str = removeWhiteSymbols(jsontxt);
     //checking { } brackets.
@@ -309,7 +363,7 @@ bool brackets()
     return true;
 }
 
-bool otherValidations()
+bool otherValidations(std::string& jsontxt)
 {
     std::string str = removeWhiteSymbols(jsontxt);
     int comas = 0, quotes = 0, doubledots = 0;

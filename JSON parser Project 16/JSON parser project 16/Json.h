@@ -1,8 +1,6 @@
 #pragma once
 #include <iostream>
 #include <map>
-#include <any>
-#include <typeinfo>
 #include <sstream>      // std::istringstream
 #include <vector>
 
@@ -21,10 +19,13 @@ public:
 	Json& operator=(const Json& other);
 
 	virtual void print();
+	void searchKey(std::string& sKey, bool & found); // this will search for matches with all keys, even nested ones in objects.
+	void deleteKey(std::string& dKey, bool & deleted); // deep searches (nested objects aswell) for the key and deletes it if it matches.
+	void create(std::string& newElement);
 
 	void reset();
 
-	const std::string& getJsontxt()const;
+	const std::string& getJsontxt()const; 
 	const std::map<std::string, Json*>& getElements() const;
 
 	void loadNparse(const std::string & txt);

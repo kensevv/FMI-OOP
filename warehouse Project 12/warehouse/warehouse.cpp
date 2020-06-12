@@ -33,6 +33,7 @@ String filename;
 Date currentDate;
 
 Vector<String> logs;
+void printLogs();
 char logsFile[9] = "logs.txt";
 void readLogs();
 
@@ -380,10 +381,7 @@ void ProdManagement()
 		}
 		else if (userInput == "logs") {
 			clearScreen();
-			for (int i = 0; i < logs.getSize(); i++)
-			{
-				std::cout << logs[i] << std::endl;
-			}
+			printLogs();
 			break;
 		}
 		else {
@@ -453,6 +451,14 @@ void getWHinfo()
 			<< "It is recommended you 'clean' your WH from all expired products." << std::endl;
 	}
 	else std::cout << "There are no expired products in WH." << std::endl;
+}
+
+void printLogs()
+{
+	for (int i = 0; i < logs.getSize(); i++)
+	{
+		std::cout << logs[i] << std::endl;
+	}
 }
 
 void readLogs()

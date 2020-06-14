@@ -68,11 +68,30 @@ void Json::searchKey(std::string& sKey, bool & found) // this will search for ma
 void Json::deleteKey(std::string& dKey, bool& deleted)
 {
 	std::map<std::string, Json*>::iterator itr;
-	for (itr = elements.begin(); itr != elements.end() && deleted == false; ++itr)
+	for (itr = elements.begin(); itr != elements.end(); ++itr)
 	{
 		if (itr->first == dKey) {
 			std::cout << itr->first << "  -  "; itr->second->print(); std::cout << "  -> DELETED from the container!" << std::endl;
-			elements.erase(itr);
+
+			/*
+			 //update the jsontxt string (delete the key)
+			for (size_t i = 0; i < jsontxt.size(); i++ )
+			{
+				size_t found = 0;
+				found = jsontxt.find(dKey, found + 1);
+				if (found != std::string::npos)
+				{
+					std::stringstream stringDeleter(jsontxt);
+					char deleteString[1000];
+					stringDeleter.seekg(found - 1, std::ios::beg);
+					stringDeleter.getline(deleteString, 1000, ',');
+					std::string findLenght = deleteString;
+					jsontxt.erase(found, findLenght.size());
+				}
+			}
+			*/
+
+			elements.erase(itr); // delete dKey from the container
 			deleted = true;
 			break;
 		}
@@ -82,9 +101,11 @@ void Json::deleteKey(std::string& dKey, bool& deleted)
 
 void Json::create(std::string& newElement)
 {
-	newElement.insert(0, "{");
-	std::cout << newElement;
-	parse(newElement, elements);
+	newElement.insert(0, ",");
+	this->jsontxt.insert( jsontxt.size() - 1, newElement);
+	std::cout << "  -> has been added to the object." << std::endl;
+	std::string Element = removeWhiteSymbols(newElement);
+	parse(Element, elements);
 }
 
 void Json::reset()
@@ -334,4 +355,3 @@ Json* Json::createJson(std::vector<std::string>& value)
 	Json* newJson = new JsonStringArray(value);
 	return newJson;
 }
-

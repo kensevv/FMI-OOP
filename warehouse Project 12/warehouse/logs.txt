@@ -4,3 +4,8 @@
 [products.txt] 2020-5-22 Added Banana - 30
 [products.txt] 2020-5-22 Added The One EDP - 5
 [products.txt] 2020-5-22 Added Vodka - 10
+[products.txt] 2020-1-1 Added as - 1234567
+[products.txt] 2020-2-2 Cleaned
+[products.txt] 2020-6-14 Cleaned
+[products.txt] 2020-6-14 Removed Troya - 50
+[products.txt] 2020-6-14 Cleaned

@@ -399,7 +399,10 @@ void Print()
 
 void Add(Product & product)
 {
-	warehouse.addProduct(product);
+	if (product.getAvailableQuantity() + warehouse.getTotalWHQuantity() > warehouse.getTotalCapacity())
+		std::cout << "Your warehouse capacity is not enough to hold this amount of quantity\nProduct has not been added.\nTry adding less amount." << std::endl;
+	else warehouse.addProduct(product);
+
 	if (product.getAddedToWh() == 1) {
 		std::cout << "Product has been successfully added to Warehouse." << std::endl;
 		allProducts.push_back(product);

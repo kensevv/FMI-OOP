@@ -39,4 +39,17 @@ public:
 	Json* createJson(std::vector<int>& value);
 	Json* createJson(std::vector<double>& value);
 	Json* createJson(std::vector<std::string>& value);
+
+	std::string removeWhiteSymbols(std::string& str)
+	{
+		std::string result;
+		for (int i = 0; i < str.length(); i++)
+		{
+			if (str[i] != ' ')
+			{
+				result = result + str[i];
+			}
+		}
+		return result;
+	}
 };
